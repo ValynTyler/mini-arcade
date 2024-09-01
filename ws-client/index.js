@@ -1,4 +1,6 @@
-var connection = new WebSocket('ws://' + "localhost" + ':8765');
+var hostname = "miniarcade.local"
+var port = "8765"
+var connection = new WebSocket(`ws://${hostname}:${port}`);
 
 connection.onopen = function () {
     console.log("Connection established successfully")
