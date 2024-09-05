@@ -1,0 +1,1 @@
+alert("RED SPY IS IN THE BASE")
