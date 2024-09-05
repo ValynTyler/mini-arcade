@@ -1,5 +1,39 @@
 body {
-    background-color: rgb(31, 31, 31);
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
+  background-color: rgb(31, 31, 31);
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.controller {
+  aspect-ratio: 2/1;
+  background-color: rgb(37, 47, 56);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.dpad {
+  background-color: rgb(77, 55, 55);
+}
+
+.dpad-button {
+    size: 100%;
+  position: absolute;
+  background-color: rgb(60, 60, 60);
+}
+
+.up {
+  transform: translateY(-100%);
+}
+
+.down {
+  transform: translateY(100%);
+}
+
+.left {
+  transform: translateX(-100%);
+}
+
+.right {
+  transform: translateX(100%);
 }
