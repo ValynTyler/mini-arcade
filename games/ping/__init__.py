@@ -90,7 +90,7 @@ def move_paddle(left_paddle, player):
             left_paddle.y += LEFT_PADDLE_SPEED
 
 
-def move_ball(ball, lpad, rpad, score):
+def move_ball(ball, left_paddle, right_paddle, score):
     global BALL_DIR
 
     # Collisions
@@ -117,9 +117,9 @@ def move_ball(ball, lpad, rpad, score):
         BALL_DIR.y *= -1
 
     # Paddles
-    if lpad.colliderect(ball):
+    if left_paddle.colliderect(ball):
         COLLISION_SOUND.play()
-        relative_collision = (lpad.y + (LEFT_PADDLE_HEIGHT / 2)) - ball.y
+        relative_collision = left_paddle.centery - ball.centery
 
         normalized_relative_collision = (relative_collision / (LEFT_PADDLE_HEIGHT / 2))
 
@@ -131,9 +131,9 @@ def move_ball(ball, lpad, rpad, score):
         # Send HF
         # asyncio.run(send_to_all_clients('100'))
 
-    if rpad.colliderect(ball):
+    if right_paddle.colliderect(ball):
         COLLISION_SOUND.play()
-        relative_collision = (rpad.y + (RIGHT_PADDLE_HEIGHT / 2)) - ball.y
+        relative_collision = right_paddle.centery - ball.centery
 
         normalized_relative_collision = (relative_collision / (RIGHT_PADDLE_HEIGHT / 2))
 
@@ -169,7 +169,6 @@ def main():
     right_paddle.center = (width - 30, height / 2)
 
     score = [0, 0]
-
     clock = pygame.time.Clock()
 
     running = True
