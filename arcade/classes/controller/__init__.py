@@ -1,5 +1,6 @@
-from controller.dpad import DPad
-from controller.joystick import Joystick
+from classes.controller.dpad import DPad
+from classes.controller.joystick import Joystick
+
 
 class Controller:
     def __init__(self):
