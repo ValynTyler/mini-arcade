@@ -1,6 +1,6 @@
 import pygame
 
-from controller import Controller
+from controller.controller import Controller
 
 if __name__ == "__main__":
     # initialize pygame
