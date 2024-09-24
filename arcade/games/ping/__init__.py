@@ -1,10 +1,8 @@
 import pygame
-import math
-from pygame.math import Vector2
 
 from classes import color
 from classes.controller import Controller
-from systems import emulator, input_monitor
+from systems import emulator
 from systems.context import game_loop
 
 if __name__ == "__main__":
@@ -20,11 +18,11 @@ if __name__ == "__main__":
 from games.ping.ball import Ball
 from games.ping.paddle import Paddle
 
+# load resources
 SCORE_FONT = pygame.font.SysFont("sansserif", 70)
+COLLISION_SOUND = pygame.mixer.Sound('sounds/ping1.wav')
 
 SCORE_LIMIT = 5
-
-COLLISION_SOUND = pygame.mixer.Sound('sounds/ping1.wav')
 
 
 def draw(ball: Ball, paddles, score):
@@ -60,10 +58,6 @@ def draw(ball: Ball, paddles, score):
     pygame.display.flip()
 
 
-def move_ball(ball, left_paddle, right_paddle, score):
-   pass
-
-
 def draw_winner(text):
     draw_text = SCORE_FONT.render(text, 1, color.white)
 
@@ -85,14 +79,21 @@ def main(player_1, player_2):
 
 
 def update(player_1, player_2, paddles, ball, score):
+    # define callbacks
+    def on_collide():
+        COLLISION_SOUND.play()
+    def on_score(i):
+        score[i] += 1
+
+    # move elements
     paddles[0].move(player_1, height)
     paddles[1].move(player_2, height)
+    ball.move(paddles, width, height, on_collide, on_score)
 
-    # move_ball(ball, left_paddle, right_paddle, score)
-    ball.move(paddles, width, height)
-
+    # draw
     draw(ball, paddles, score)
 
+    # check score
     if score[0] >= SCORE_LIMIT:
         score[0] += 1
         draw_winner('PLAYER 1 WINS!')
