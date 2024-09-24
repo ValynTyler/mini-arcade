@@ -1,6 +1,7 @@
 import pygame
-
 from classes.controller import Controller
+from systems import context
+from systems.context import game_loop
 
 if __name__ == "__main__":
     # initialize pygame
@@ -13,18 +14,10 @@ if __name__ == "__main__":
     pygame.display.set_caption("controller emulator")
 
 
-def run(controller: Controller):
-    running: bool = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-
-        controller.print()
-
+def update(cont: Controller):
+    cont.print()
 
 if __name__ == "__main__":
-    run(Controller())
+    controller = Controller()
+    f = game_loop(update)
+    f(controller)
