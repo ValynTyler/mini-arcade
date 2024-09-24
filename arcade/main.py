@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
 async def run_concurrently():
     controller = Controller()
-    emulator_task = asyncio.to_thread(emulator.main, controller)
+    emulator_task = asyncio.to_thread(emulator.run, controller)
     monitor_task = asyncio.to_thread(input_monitor.run, controller)
 
     await asyncio.gather(emulator_task, monitor_task)
