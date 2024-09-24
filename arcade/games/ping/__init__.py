@@ -32,7 +32,7 @@ def draw(ball: Ball, paddles: [Paddle], state: State):
     Background().draw(screen, width)
 
     # draw ball
-    pygame.draw.rect(screen, (255, 255, 255), ball.rect)
+    ball.draw(screen)
 
     # draw paddles
     for paddle in paddles:

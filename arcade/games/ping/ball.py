@@ -60,5 +60,5 @@ class Ball:
         self.rect.x += self.direction.x * self.speed
         self.rect.y += self.direction.y * self.speed
 
-    def draw(self):
-        pass
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, self.rect)
