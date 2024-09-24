@@ -2,9 +2,8 @@ import pygame
 import math
 from pygame.math import Vector2
 
-from color import white
-
-from controller import *
+from classes import color
+from classes.controller import Controller
 
 player1 = Controller()
 player2 = Controller()
@@ -150,7 +149,7 @@ def move_ball(ball, left_paddle, right_paddle, score):
 
 
 def draw_winner(text):
-    draw_text = SCORE_FONT.render(text, 1, white)
+    draw_text = SCORE_FONT.render(text, 1, color.white)
 
     screen.blit(draw_text, (width / 2 - draw_text.get_width() / 2, height / 2 - draw_text.get_height() / 2))
 
