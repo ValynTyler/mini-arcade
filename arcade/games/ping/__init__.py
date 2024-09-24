@@ -18,6 +18,7 @@ if __name__ == "__main__":
 from games.ping.ball import Ball
 from games.ping.paddle import Paddle
 from games.ping.state import State
+from games.ping.background import Background
 
 # load resources
 SCORE_FONT = pygame.font.SysFont("sansserif", 70)
@@ -27,8 +28,8 @@ SCORE_LIMIT = 5
 
 
 def draw(ball: Ball, paddles, score):
-    # clear screen
-    screen.fill(color.black)
+    # draw background
+    Background().draw(screen, width)
 
     # draw ball
     pygame.draw.rect(screen, (255, 255, 255), ball.rect)
@@ -37,10 +38,6 @@ def draw(ball: Ball, paddles, score):
     for paddle in paddles:
         pygame.draw.rect(screen, paddle.color, paddle.rect)
 
-    # draw border
-    dot_size = (1, 25)
-    for x in range(10):
-        pygame.draw.rect(screen, (255, 255, 255), ((width / 2 + dot_size[0] / 2, x * 50), dot_size))
 
     # draw score
     # left
