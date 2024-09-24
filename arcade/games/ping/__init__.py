@@ -4,9 +4,8 @@ from pygame.math import Vector2
 
 from classes import color
 from classes.controller import Controller
-
-player1 = Controller()
-player2 = Controller()
+from systems import emulator, input_monitor
+from systems.context import game_loop
 
 if __name__ == "__main__":
     # initialize pygame
@@ -18,43 +17,26 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(screen_size)
     pygame.display.set_caption("ping")
 
-# Dead zone
-DEAD_ZONE = 0.2
+from games.ping.ball import Ball
+from games.ping.paddle import Paddle
 
-# Font
 SCORE_FONT = pygame.font.SysFont("sansserif", 70)
-
-# Left paddle properties
-LEFT_PADDLE_WIDTH = 15
-LEFT_PADDLE_HEIGHT = 150
-LEFT_PADDLE_SPEED = 5
-
-# Right paddle properties
-RIGHT_PADDLE_WIDTH = 15
-RIGHT_PADDLE_HEIGHT = 150
-RIGHT_PADDLE_SPEED = 5
-
-# Ball properties
-BALL_WIDTH = 10
-BALL_HEIGHT = 10
-BALL_SPEED = 10
-BALL_DIR = (Vector2(1, 0)).rotate(180)
 
 SCORE_LIMIT = 5
 
 COLLISION_SOUND = pygame.mixer.Sound('sounds/ping1.wav')
 
 
-def draw(ball, left_paddle, right_paddle, score):
+def draw(ball: Ball, paddles, score):
     # clear screen
-    screen.fill((0, 0, 0))
+    screen.fill(color.black)
 
     # draw ball
-    pygame.draw.rect(screen, (255, 255, 255), ball)
+    pygame.draw.rect(screen, (255, 255, 255), ball.rect)
 
     # draw paddles
-    pygame.draw.rect(screen, (255, 255, 255), left_paddle)
-    pygame.draw.rect(screen, (255, 255, 255), right_paddle)
+    for paddle in paddles:
+        pygame.draw.rect(screen, paddle.color, paddle.rect)
 
     # draw border
     dot_size = (1, 25)
@@ -78,74 +60,8 @@ def draw(ball, left_paddle, right_paddle, score):
     pygame.display.flip()
 
 
-def move_paddle(left_paddle, player):
-    # Up
-    if left_paddle.top > 0:
-        if player.dpad.up is True or player.joystick.y >= DEAD_ZONE:
-            left_paddle.y -= LEFT_PADDLE_SPEED
-    # Down
-    elif left_paddle.bottom < height:
-        if player.dpad.down is True or player.joystick.y <= DEAD_ZONE:
-            left_paddle.y += LEFT_PADDLE_SPEED
-
-
 def move_ball(ball, left_paddle, right_paddle, score):
-    global BALL_DIR
-
-    # Collisions
-    # Side walls
-    if ball.right > width:
-        # Left Player Scored!
-        score[0] += 1
-
-        BALL_DIR = Vector2(-1, 0)
-        ball.center = (width / 2, height / 2)
-        # Send haptic feedback
-        # asyncio.run(send_to_all_clients('300'))
-
-    if ball.left < 0:
-        # Left Player Scored!
-        score[1] += 1
-
-        BALL_DIR = Vector2(1, 0)
-        ball.center = (width / 2, height / 2)
-        # asyncio.run(send_to_all_clients('300'))
-
-    if ball.bottom > height or ball.top < 0:
-        COLLISION_SOUND.play()
-        BALL_DIR.y *= -1
-
-    # Paddles
-    if left_paddle.colliderect(ball):
-        COLLISION_SOUND.play()
-        relative_collision = left_paddle.centery - ball.centery
-
-        normalized_relative_collision = (relative_collision / (LEFT_PADDLE_HEIGHT / 2))
-
-        bounce_angle = normalized_relative_collision * math.radians(-60)
-
-        BALL_DIR.x = math.cos(bounce_angle)
-        BALL_DIR.y = math.sin(bounce_angle)
-
-        # Send HF
-        # asyncio.run(send_to_all_clients('100'))
-
-    if right_paddle.colliderect(ball):
-        COLLISION_SOUND.play()
-        relative_collision = right_paddle.centery - ball.centery
-
-        normalized_relative_collision = (relative_collision / (RIGHT_PADDLE_HEIGHT / 2))
-
-        bounce_angle = normalized_relative_collision * math.radians(-60)
-
-        BALL_DIR.x = -math.cos(bounce_angle)
-        BALL_DIR.y = math.sin(bounce_angle)
-
-        # Send HF
-        # asyncio.run(send_to_all_clients('100'))
-
-    ball.x += BALL_DIR.x * BALL_SPEED
-    ball.y += BALL_DIR.y * BALL_SPEED
+   pass
 
 
 def draw_winner(text):
@@ -157,46 +73,47 @@ def draw_winner(text):
     pygame.time.delay(5000)
 
 
-def main():
-    ball = pygame.Rect(width / 2, height / 2, BALL_WIDTH, BALL_HEIGHT)
-    ball.center = (width / 2, height / 2)
-
-    left_paddle = pygame.Rect(0, 0, LEFT_PADDLE_WIDTH, LEFT_PADDLE_HEIGHT)
-    left_paddle.center = (30, height / 2)
-
-    right_paddle = pygame.Rect(0, 0, RIGHT_PADDLE_WIDTH, RIGHT_PADDLE_HEIGHT)
-    right_paddle.center = (width - 30, height / 2)
+def main(player_1, player_2):
+    ball = Ball(center=(width / 2, height / 2))
+    paddles = [
+        Paddle(center=(30, height / 2)),
+        Paddle(center=(width - 30, height / 2))
+    ]
 
     score = [0, 0]
-    clock = pygame.time.Clock()
+    run(player_1, player_2, paddles, ball, score)
 
-    running = True
-    while running:
-        clock.tick(60)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
 
-        move_paddle(left_paddle, player1)
-        move_paddle(right_paddle, player2)
+def update(player_1, player_2, paddles, ball, score):
+    paddles[0].move(player_1, height)
+    paddles[1].move(player_2, height)
 
-        move_ball(ball, left_paddle, right_paddle, score)
+    # move_ball(ball, left_paddle, right_paddle, score)
+    ball.move(paddles, width, height)
 
-        draw(ball, left_paddle, right_paddle, score)
+    draw(ball, paddles, score)
 
-        if score[0] >= SCORE_LIMIT:
-            score[0] += 1
-            draw_winner('PLAYER 1 WINS!')
-            return
+    if score[0] >= SCORE_LIMIT:
+        score[0] += 1
+        draw_winner('PLAYER 1 WINS!')
+        return
 
-        if score[1] >= SCORE_LIMIT:
-            score[1] += 1
-            draw_winner('PLAYER 2 WINS!')
-            return
+    if score[1] >= SCORE_LIMIT:
+        score[1] += 1
+        draw_winner('PLAYER 2 WINS!')
+        return
 
-    pygame.quit()
+
+@game_loop
+def run(player_1, player_2, paddles, ball, score):
+    emulator.update(player_1)
+    emulator.update(player_2, True)
+    update(player_1, player_2, paddles, ball, score)
 
 
 if __name__ == "__main__":
+    player1 = Controller()
+    player2 = Controller()
+
     # start the game
-    main()
+    main(player1, player2)
