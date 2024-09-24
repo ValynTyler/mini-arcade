@@ -1,4 +1,5 @@
 import pygame
+from pygame.examples.aliens import SCORE
 
 from classes import color
 from classes.controller import Controller
@@ -21,9 +22,10 @@ from games.ping.ball import Ball
 from games.ping.paddle import Paddle
 from games.ping.state import State
 from games.ping.background import Background
+from games.ping.score_counter import ScoreCounter
 
 # load resources
-SCORE_FONT = pygame.font.SysFont("sansserif", 70)
+score_font = pygame.font.SysFont("sansserif", 70)
 COLLISION_SOUND = pygame.mixer.Sound('sounds/ping1.wav')
 
 
@@ -39,24 +41,15 @@ def draw(ball: Ball, paddles: [Paddle], state: State):
         paddle.draw(screen)
 
     # draw score
-    # left
-    left_score_text = SCORE_FONT.render(f"{state.current.score[0]}", 1, (255, 255, 255))
-    left_score_text_rect = left_score_text.get_rect()
-    left_score_text_rect.topleft = (width / 2 - left_score_text.get_width() - 25, 10)
-    screen.blit(left_score_text, left_score_text_rect)
-
-    # right
-    right_score_text = SCORE_FONT.render(f"{state.current.score[1]}", 1, (255, 255, 255))
-    right_score_text_rect = right_score_text.get_rect()
-    right_score_text_rect.topright = (width / 2 + right_score_text.get_width() + 25, 10)
-    screen.blit(right_score_text, right_score_text_rect)
+    ScoreCounter(str(state.current.score[0]), score_font).draw(screen, bounds, True)
+    ScoreCounter(str(state.current.score[1]), score_font).draw(screen, bounds, False)
 
     # flip buffers
     pygame.display.flip()
 
 
 def draw_winner(text):
-    draw_text = SCORE_FONT.render(text, 1, color.white)
+    draw_text = score_font.render(text, 1, color.white)
 
     screen.blit(draw_text, (width / 2 - draw_text.get_width() / 2, height / 2 - draw_text.get_height() / 2))
 
