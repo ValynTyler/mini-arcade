@@ -1,4 +1,5 @@
 import pygame
+from pygame import SurfaceType
 
 from classes.controller import Controller
 from classes.color import white
@@ -26,3 +27,6 @@ class Paddle:
         if self.rect.bottom < bounds.bottom:
             if inputs.dpad.down is True:  # or player.joystick.y <= DEAD_ZONE:
                 self.rect.y += self.speed
+
+    def draw(self, screen: SurfaceType):
+        pygame.draw.rect(screen, self.color, self.rect)

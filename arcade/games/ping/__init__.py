@@ -36,7 +36,7 @@ def draw(ball: Ball, paddles: [Paddle], state: State):
 
     # draw paddles
     for paddle in paddles:
-        pygame.draw.rect(screen, paddle.color, paddle.rect)
+        paddle.draw(screen)
 
     # draw score
     # left
