@@ -15,4 +15,4 @@ class Background:
         # draw border
         dot_size = (1, 25)
         for x in range(10):
-            pygame.draw.rect(screen, (255, 255, 255), ((screen_width / 2 + dot_size[0] / 2, x * 50), dot_size))
+            pygame.draw.rect(screen, self.border_color, ((screen_width / 2 + dot_size[0] / 2, x * 50), dot_size))
