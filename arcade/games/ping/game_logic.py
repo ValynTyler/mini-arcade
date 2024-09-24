@@ -3,9 +3,11 @@ from typing import Literal
 
 class Running:
     score: [int, int]
+    max_score: int
 
-    def __init__(self):
+    def __init__(self, max_score = 5):
         self.score = [0, 0]
+        self.max_score = max_score
 
 
 class Ended:

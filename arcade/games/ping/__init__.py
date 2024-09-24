@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
 from games.ping.ball import Ball
 from games.ping.paddle import Paddle
-from games.ping.state import State
+from games.ping.game_logic import State
 from games.ping.background import Background
 from games.ping.score_counter import ScoreCounter
 
@@ -32,18 +32,14 @@ COLLISION_SOUND = pygame.mixer.Sound('sounds/ping1.wav')
 def draw(ball: Ball, paddles: [Paddle], state: State):
     # draw background
     Background().draw(screen, width)
-
     # draw ball
     ball.draw(screen)
-
     # draw paddles
     for paddle in paddles:
         paddle.draw(screen)
-
     # draw score
     ScoreCounter(str(state.current.score[0]), score_font).draw(screen, bounds, True)
     ScoreCounter(str(state.current.score[1]), score_font).draw(screen, bounds, False)
-
     # flip buffers
     pygame.display.flip()
 
