@@ -17,12 +17,12 @@ class Paddle:
         self.rect.center = center
         self.color = color
 
-    def move(self, inputs: Controller, screen_height):
+    def move(self, inputs: Controller, bounds: pygame.Rect):
         # Up
-        if self.rect.top > 0:
+        if self.rect.top > bounds.top:
             if inputs.dpad.up is True:  # or player.joystick.y >= DEAD_ZONE:
                 self.rect.y -= self.speed
         # Down
-        if self.rect.bottom < screen_height:
+        if self.rect.bottom < bounds.bottom:
             if inputs.dpad.down is True:  # or player.joystick.y <= DEAD_ZONE:
                 self.rect.y += self.speed

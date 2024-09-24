@@ -19,27 +19,24 @@ class Ball:
         self.rect.center = center
         self.color = color
 
-    def move(self, paddles, screen_width, screen_height, on_collide=lambda: None, on_score=lambda i: None):
+    def move(self, paddles, bounds: pygame.Rect, on_collide=lambda: None, on_score=lambda i: None):
         # Collisions
-        # Side walls
-        if self.rect.right > screen_width:
+        # Left
+        if self.rect.right > bounds.right:
             # Left Player Scored!
             on_score(0)
 
             self.direction = Vector2(-1, 0)
-            self.rect.center = (screen_width / 2, screen_height / 2)
-            # Send haptic feedback
-            # asyncio.run(send_to_all_clients('300'))
-
-        if self.rect.left < 0:
+            self.rect.center = (bounds.centerx, bounds.centery)
+        # Right
+        if self.rect.left < bounds.left:
             # Right Player Scored!
             on_score(1)
 
             self.direction = Vector2(1, 0)
-            self.rect.center = (screen_width / 2, screen_height / 2)
-            # asyncio.run(send_to_all_clients('300'))
-
-        if self.rect.bottom > screen_height or self.rect.top < 0:
+            self.rect.center = (bounds.centerx, bounds.centery)
+        # Top and Bottom
+        if self.rect.bottom > bounds.bottom or self.rect.top < bounds.top:
             on_collide()
             self.direction.y *= -1
 
@@ -57,10 +54,11 @@ class Ball:
                 self.direction.x = math.cos(bounce_angle) * sign
                 self.direction.y = math.sin(bounce_angle)
 
-                # Send HF
-                # asyncio.run(send_to_all_clients('100'))
-
             sign = sign * -1
 
+        # move ball
         self.rect.x += self.direction.x * self.speed
         self.rect.y += self.direction.y * self.speed
+
+    def draw(self):
+        pass

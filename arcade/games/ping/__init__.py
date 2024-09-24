@@ -9,6 +9,8 @@ if __name__ == "__main__":
     # initialize pygame
     width = 700
     height = 500
+    bounds = pygame.Rect(0, 0, width, height)
+    bounds.center = (width/2, height/2)
     pygame.init()
     screen_size = (width, height)
     #  create a window
@@ -24,10 +26,8 @@ from games.ping.background import Background
 SCORE_FONT = pygame.font.SysFont("sansserif", 70)
 COLLISION_SOUND = pygame.mixer.Sound('sounds/ping1.wav')
 
-SCORE_LIMIT = 5
 
-
-def draw(ball: Ball, paddles, score):
+def draw(ball: Ball, paddles: [Paddle], state: State):
     # draw background
     Background().draw(screen, width)
 
@@ -38,16 +38,15 @@ def draw(ball: Ball, paddles, score):
     for paddle in paddles:
         pygame.draw.rect(screen, paddle.color, paddle.rect)
 
-
     # draw score
     # left
-    left_score_text = SCORE_FONT.render(f"{score[0]}", 1, (255, 255, 255))
+    left_score_text = SCORE_FONT.render(f"{state.current.score[0]}", 1, (255, 255, 255))
     left_score_text_rect = left_score_text.get_rect()
     left_score_text_rect.topleft = (width / 2 - left_score_text.get_width() - 25, 10)
     screen.blit(left_score_text, left_score_text_rect)
 
     # right
-    right_score_text = SCORE_FONT.render(f"{score[1]}", 1, (255, 255, 255))
+    right_score_text = SCORE_FONT.render(f"{state.current.score[1]}", 1, (255, 255, 255))
     right_score_text_rect = right_score_text.get_rect()
     right_score_text_rect.topright = (width / 2 + right_score_text.get_width() + 25, 10)
     screen.blit(right_score_text, right_score_text_rect)
@@ -76,20 +75,21 @@ def main(player_1, player_2):
     run(player_1, player_2, paddles, ball, state)
 
 
-def update(player_1, player_2, paddles, ball, state):
+def update(player_1, player_2, paddles, ball: Ball, state):
     # define callbacks
     def on_collide():
         COLLISION_SOUND.play()
+
     def on_score(i):
         state.current.score[i] += 1
 
     # move elements
-    paddles[0].move(player_1, height)
-    paddles[1].move(player_2, height)
-    ball.move(paddles, width, height, on_collide, on_score)
+    paddles[0].move(player_1, bounds)
+    paddles[1].move(player_2, bounds)
+    ball.move(paddles, bounds, on_collide, on_score)
 
     # draw
-    draw(ball, paddles, state.current.score)
+    draw(ball, paddles, state)
 
     # check score
     # if score[0] >= SCORE_LIMIT:
