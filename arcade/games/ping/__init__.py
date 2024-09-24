@@ -17,6 +17,7 @@ if __name__ == "__main__":
 
 from games.ping.ball import Ball
 from games.ping.paddle import Paddle
+from games.ping.state import State
 
 # load resources
 SCORE_FONT = pygame.font.SysFont("sansserif", 70)
@@ -68,22 +69,22 @@ def draw_winner(text):
 
 
 def main(player_1, player_2):
+    state = State()
     ball = Ball(center=(width / 2, height / 2))
     paddles = [
         Paddle(center=(30, height / 2)),
         Paddle(center=(width - 30, height / 2))
     ]
 
-    score = [0, 0]
-    run(player_1, player_2, paddles, ball, score)
+    run(player_1, player_2, paddles, ball, state)
 
 
-def update(player_1, player_2, paddles, ball, score):
+def update(player_1, player_2, paddles, ball, state):
     # define callbacks
     def on_collide():
         COLLISION_SOUND.play()
     def on_score(i):
-        score[i] += 1
+        state.current.score[i] += 1
 
     # move elements
     paddles[0].move(player_1, height)
@@ -91,27 +92,28 @@ def update(player_1, player_2, paddles, ball, score):
     ball.move(paddles, width, height, on_collide, on_score)
 
     # draw
-    draw(ball, paddles, score)
+    draw(ball, paddles, state.current.score)
 
     # check score
-    if score[0] >= SCORE_LIMIT:
-        score[0] += 1
-        draw_winner('PLAYER 1 WINS!')
-        return
-
-    if score[1] >= SCORE_LIMIT:
-        score[1] += 1
-        draw_winner('PLAYER 2 WINS!')
-        return
+    # if score[0] >= SCORE_LIMIT:
+    #     score[0] += 1
+    #     draw_winner('PLAYER 1 WINS!')
+    #     return
+    #
+    # if score[1] >= SCORE_LIMIT:
+    #     score[1] += 1
+    #     draw_winner('PLAYER 2 WINS!')
+    #     return
 
 
 @game_loop
-def run(player_1, player_2, paddles, ball, score):
+def run(player_1, player_2, paddles, ball, state):
     emulator.update(player_1)
     emulator.update(player_2, True)
-    update(player_1, player_2, paddles, ball, score)
+    update(player_1, player_2, paddles, ball, state)
 
 
+# if file is launched, run with emulated controls
 if __name__ == "__main__":
     player1 = Controller()
     player2 = Controller()
