@@ -1,6 +1,10 @@
+import asyncio
+
 import pygame
 
 from classes.controller import Controller
+from systems import input_monitor
+from systems.context import game_loop
 
 if __name__ == "__main__":
     # initialize pygame
@@ -13,6 +17,7 @@ if __name__ == "__main__":
     pygame.display.set_caption("controller emulator")
 
 
+@game_loop
 def update(controller: Controller, use_arrow_keys: bool = False):
     keys = pygame.key.get_pressed()
     if use_arrow_keys:
@@ -28,13 +33,13 @@ def update(controller: Controller, use_arrow_keys: bool = False):
 
 
 if __name__ == "__main__":
-    running = True
-    while running:
-        update(Controller())
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
+    controller = Controller()
 
+
+    async def async_emulator():
+        emulator_task = asyncio.to_thread(update, controller, False)
+        monitor_task = asyncio.to_thread(input_monitor.update, controller)
+        await asyncio.gather(emulator_task, monitor_task)
+
+
+    asyncio.run(async_emulator())

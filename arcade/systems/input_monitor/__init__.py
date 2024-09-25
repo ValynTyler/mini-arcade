@@ -14,6 +14,7 @@ if __name__ == "__main__":
     pygame.display.set_caption("controller emulator")
 
 
+@game_loop
 def update(cont: Controller):
     cont.print()
 
