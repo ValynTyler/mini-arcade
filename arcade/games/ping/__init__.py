@@ -13,9 +13,8 @@ if __name__ == "__main__":
     bounds = pygame.Rect(0, 0, width, height)
     bounds.center = (width / 2, height / 2)
     pygame.init()
-    screen_size = (width, height)
     #  create a window
-    screen = pygame.display.set_mode(screen_size)
+    screen = pygame.display.set_mode((width, height), pygame.SHOWN)
     pygame.display.set_caption("ping")
 
 from games.ping.ball import Ball
@@ -90,7 +89,7 @@ def update(player_1, player_2, paddles, ball: Ball, game: Game):
     # draw
     draw(ball, paddles, game)
 
-    emulator.update(player_1)
+    emulator.update(player_1, False)
     emulator.update(player_2, True)
 
 

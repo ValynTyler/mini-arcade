@@ -14,11 +14,10 @@ if __name__ == "__main__":
     pygame.display.set_caption("controller emulator")
 
 
-@game_loop
 def update(cont: Controller):
     cont.print()
 
 if __name__ == "__main__":
     controller = Controller()
-    f = game_loop(update)
-    f(controller)
+    loop = game_loop(update)
+    loop(controller)

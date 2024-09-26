@@ -17,7 +17,6 @@ if __name__ == "__main__":
     pygame.display.set_caption("controller emulator")
 
 
-@game_loop
 def update(controller: Controller, use_arrow_keys: bool = False):
     keys = pygame.key.get_pressed()
     if use_arrow_keys:
