@@ -16,15 +16,6 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(screen_size)
     pygame.display.set_caption("controller emulator")
 
-async def run_concurrently():
-    controller = Controller()
-
-    input_monitor_task = asyncio.to_thread(input_monitor.update, controller)
-    emulator_task = asyncio.to_thread(emulator.update, controller)
-    await asyncio.gather(emulator_task, input_monitor_task)
-
-# asyncio.run(run_concurrently())
-
 
 @game_loop
 def run():

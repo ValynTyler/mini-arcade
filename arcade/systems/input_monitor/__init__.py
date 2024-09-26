@@ -1,6 +1,7 @@
 import pygame
+
 from classes.controller import Controller
-from systems import context
+from systems import emulator
 from systems.context import game_loop
 
 if __name__ == "__main__":
@@ -17,7 +18,15 @@ if __name__ == "__main__":
 def update(cont: Controller):
     cont.print()
 
+
 if __name__ == "__main__":
     controller = Controller()
-    loop = game_loop(update)
-    loop(controller)
+
+
+    def run_together():
+        emulator.update(controller, False)
+        update(controller)
+
+
+    loop = game_loop(run_together)
+    loop()

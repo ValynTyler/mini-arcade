@@ -1,5 +1,3 @@
-import asyncio
-
 import pygame
 
 from classes.controller import Controller
@@ -35,10 +33,10 @@ if __name__ == "__main__":
     controller = Controller()
 
 
-    async def async_emulator():
-        emulator_task = asyncio.to_thread(update, controller, False)
-        monitor_task = asyncio.to_thread(input_monitor.update, controller)
-        await asyncio.gather(emulator_task, monitor_task)
+    def run_together():
+        update(controller, False)
+        input_monitor.update(controller)
 
 
-    asyncio.run(async_emulator())
+    loop = game_loop(run_together)
+    loop()
