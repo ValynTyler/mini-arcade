@@ -23,10 +23,3 @@ class Ended:
 
 
 State = Running | Ended
-
-
-class Game:
-    state: State
-
-    def __init__(self):
-        self.state = Running()

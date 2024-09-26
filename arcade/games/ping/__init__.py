@@ -4,22 +4,17 @@ from classes import color
 from classes.color import black
 from classes.controller import Controller
 from systems import emulator
-from systems.context import game_loop
+from systems.context import game_loop, Context
 
 if __name__ == "__main__":
-    # initialize pygame
-    width = 700
-    height = 500
-    bounds = pygame.Rect(0, 0, width, height)
-    bounds.center = (width / 2, height / 2)
-    pygame.init()
-    #  create a window
-    screen = pygame.display.set_mode((width, height), pygame.SHOWN)
-    pygame.display.set_caption("ping")
+    ctx = Context(caption="ping")
+    screen = ctx.screen
+    width = ctx.width
+    height = ctx.height
 
 from games.ping.ball import Ball
 from games.ping.paddle import Paddle
-from games.ping.game_logic import State, Running, Ended, Game
+from games.ping.state import State, Running, Ended
 from games.ping.background import Background
 from games.ping.score_counter import ScoreCounter
 
@@ -28,74 +23,91 @@ score_font = pygame.font.SysFont("sansserif", 70)
 COLLISION_SOUND = pygame.mixer.Sound('sounds/ping1.wav')
 
 
-def draw(ball: Ball, paddles: [Paddle], game: Game):
-    match game.state:
-        case Running(scores=scores):
-            # draw background
-            Background().draw(screen, width)
-            # draw ball
-            ball.draw(screen)
-            # draw paddles
-            for paddle in paddles:
-                paddle.draw(screen)
-            # draw score
-            ScoreCounter(str(game.state.scores[0]), score_font).draw(screen, bounds, True)
-            ScoreCounter(str(game.state.scores[1]), score_font).draw(screen, bounds, False)
-        case Ended(winner=winner):
-            # draw background
-            screen.fill(black)
-            draw_text = score_font.render(f"Player {winner + 1} WINS!", 1, color.white)
-            screen.blit(draw_text, (width / 2 - draw_text.get_width() / 2, height / 2 - draw_text.get_height() / 2))
-        case _:
-            print(game.state)
+class Game:
+    player_1: Controller
+    player_2: Controller
 
-    # flip buffers
-    pygame.display.flip()
+    ball: Ball
+    paddles: [Paddle]
+    bounds: (int, int)
+    state: State
 
+    def __init__(self, p1: Controller, p2: Controller):
+        self.player_1 = p1
+        self.player_2 = p2
 
-def start(player_1, player_2):
-    game = Game()
-    ball = Ball(center=(width / 2, height / 2))
-    paddles = [
-        Paddle(center=(30, height / 2)),
-        Paddle(center=(width - 30, height / 2))
-    ]
+    def start(self):
+        self.ball = Ball(center=(width / 2, height / 2))
+        self.paddles = [
+            Paddle(center=(30, height / 2)),
+            Paddle(center=(width - 30, height / 2))
+        ]
 
-    update(player_1, player_2, paddles, ball, game)
+        self.bounds = pygame.Rect(0, 0, width, height)
+        self.bounds.center = (width / 2, height / 2)
 
+        self.state = Running()
 
-@game_loop
-def update(player_1, player_2, paddles, ball: Ball, game: Game):
-    # define callbacks
-    def on_collide():
-        COLLISION_SOUND.play()
+        self.update()
 
-    def on_score(i):
-        game.state.scores[i] += 1
+    @game_loop
+    def update(self):
+        # define callbacks
+        def on_collide():
+            COLLISION_SOUND.play()
 
-    def on_win_detected(i):
-        game.state = Ended(i)
+        def on_score(i):
+            self.state.scores[i] += 1
 
-    # logic
-    match game.state:
-        case Running():
-            # move elements
-            paddles[0].move(player_1, bounds)
-            paddles[1].move(player_2, bounds)
-            ball.move(paddles, bounds, on_collide, on_score)
-            # check score
-            game.state.check_score(on_win_detected)
+        def on_win_detected(i):
+            self.state = Ended(i)
 
-    # draw
-    draw(ball, paddles, game)
+        # logic
+        match self.state:
+            case Running():
+                # move elements
+                self.paddles[0].move(player_1, self.bounds)
+                self.paddles[1].move(player_2, self.bounds)
+                self.ball.move(self.paddles, self.bounds, on_collide, on_score)
+                # check score
+                self.state.check_score(on_win_detected)
 
-    emulator.update(player_1, False)
-    emulator.update(player_2, True)
+        # draw
+        self.draw()
+
+        emulator.update(player_1, False)
+        emulator.update(player_2, True)
+
+    def draw(self):
+        match self.state:
+            case Running(scores=scores):
+                # draw background
+                Background().draw(screen, width)
+                # draw ball
+                self.ball.draw(screen)
+                # draw paddles
+                for p in self.paddles:
+                    p.draw(screen)
+                # draw score
+                ScoreCounter(str(scores[0]), score_font).draw(screen, self.bounds, True)
+                ScoreCounter(str(scores[1]), score_font).draw(screen, self.bounds, False)
+            case Ended(winner=winner):
+                # draw background
+                screen.fill(black)
+                draw_text = score_font.render(f"Player {winner + 1} WINS!", 1, color.white)
+                screen.blit(draw_text, (width / 2 - draw_text.get_width() / 2, height / 2 - draw_text.get_height() / 2))
+            case _:
+                print(self.state)
+
+        # flip buffers
+        pygame.display.flip()
+
+    pass
 
 
 if __name__ == "__main__":
     player_1 = Controller()
     player_2 = Controller()
 
-    # start the game
-    start(player_1, player_2)
+    game = Game(player_1, player_2)
+    game.start()

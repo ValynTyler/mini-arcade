@@ -1,4 +1,5 @@
 import pygame
+from pygame import SurfaceType
 
 
 def game_loop(func):
@@ -21,14 +22,16 @@ def game_loop(func):
 
 
 class Context:
+    screen: SurfaceType
     def __init__(self, width=800, height=480, caption="pygame"):
         self.width = width
         self.height = height
         self.caption = caption
+        self.init()
 
     def init(self):
         # initialize pygame
         pygame.init()
         #  create a window
-        screen = pygame.display.set_mode((self.width, self.height), pygame.SHOWN)
+        self.screen = pygame.display.set_mode((self.width, self.height), pygame.SHOWN)
         pygame.display.set_caption(self.caption)
