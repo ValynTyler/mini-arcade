@@ -16,4 +16,19 @@ def game_loop(func):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
+
     return inner
+
+
+class Context:
+    def __init__(self, width=800, height=480, caption="pygame"):
+        self.width = width
+        self.height = height
+        self.caption = caption
+
+    def init(self):
+        # initialize pygame
+        pygame.init()
+        #  create a window
+        screen = pygame.display.set_mode((self.width, self.height), pygame.SHOWN)
+        pygame.display.set_caption(self.caption)
