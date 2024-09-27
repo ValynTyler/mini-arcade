@@ -33,8 +33,8 @@ class Game:
     def start(self):
         self.ball = Ball(center=(width / 2, height / 2))
         self.paddles = [
-            Paddle(center=(30, height / 2)),
-            Paddle(center=(width - 30, height / 2))
+            Paddle(controller=self.player_1, center=(30, height / 2)),
+            Paddle(controller=self.player_2, center=(width - 30, height / 2))
         ]
 
         self.bounds = pygame.Rect(0, 0, width, height)
@@ -54,8 +54,8 @@ class Game:
         def on_collide():
             self.collision_sound.play()
 
-        def on_score(i):
-            self.state.scores[i] += 1
+        def on_score(scorer):
+            self.state.scores[scorer] += 1
 
         def on_win_detected(winner):
             self.state = Ended(winner)
@@ -64,8 +64,8 @@ class Game:
         match self.state:
             case Running():
                 # move elements
-                self.paddles[0].move(ctx.dt, player_1, self.bounds)
-                self.paddles[1].move(ctx.dt, player_2, self.bounds)
+                self.paddles[0].move(ctx.dt, self.bounds)
+                self.paddles[1].move(ctx.dt, self.bounds)
                 self.ball.move(ctx.dt, self.bounds, self.paddles, on_collide, on_score)
                 # check score
                 self.state.check_score(on_win_detected)
