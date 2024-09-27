@@ -92,8 +92,13 @@ class Game:
             case Ended(winner=winner):
                 # draw background
                 screen.fill(black)
-                draw_text = self.score_font.render(f"Player {winner + 1} WINS!", 1, color.white)
-                screen.blit(draw_text, (width / 2 - draw_text.get_width() / 2, height / 2 - draw_text.get_height() / 2))
+                text = f"Player {winner + 1} WINS!"
+                text_surface = self.score_font.render(text, 1, color.white)
+                screen.blit(
+                    text_surface,
+                    (width / 2 - text_surface.get_width() / 2,
+                     height / 2 - text_surface.get_height() / 2)
+                )
             case _:
                 print(self.state)
 
