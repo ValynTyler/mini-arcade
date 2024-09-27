@@ -1,26 +1,17 @@
 import pygame
+from pygame.font import Font
+from pygame.mixer import SoundType
 
 from classes import color
 from classes.color import black
 from classes.controller import Controller
-from systems import emulator
-from systems.context import Context
-
-if __name__ == "__main__":
-    ctx = Context(caption="ping", framerate=60)
-    screen = ctx.screen
-    width = ctx.width
-    height = ctx.height
-
+from games.ping.background import Background
 from games.ping.ball import Ball
 from games.ping.paddle import Paddle
-from games.ping.state import State, Running, Ended
-from games.ping.background import Background
 from games.ping.score_counter import ScoreCounter
-
-# load resources
-score_font = pygame.font.SysFont("sansserif", 70)
-COLLISION_SOUND = pygame.mixer.Sound('sounds/ping1.wav')
+from games.ping.state import State, Running, Ended
+from systems import emulator
+from systems.context import Context
 
 
 class Game:
@@ -31,6 +22,9 @@ class Game:
     paddles: [Paddle]
     bounds: (int, int)
     state: State
+
+    score_font: Font
+    collision_sound: SoundType
 
     def __init__(self, p1: Controller, p2: Controller):
         self.player_1 = p1
@@ -48,19 +42,23 @@ class Game:
 
         self.state = Running()
 
+        # load resources
+        self.score_font = pygame.font.SysFont("sansserif", 70)
+        self.collision_sound = pygame.mixer.Sound('sounds/ping1.wav')
+
         loop = ctx.run(self.update)
         loop()
 
     def update(self):
         # define callbacks
         def on_collide():
-            COLLISION_SOUND.play()
+            self.collision_sound.play()
 
         def on_score(i):
             self.state.scores[i] += 1
 
-        def on_win_detected(i):
-            self.state = Ended(i)
+        def on_win_detected(winner):
+            self.state = Ended(winner)
 
         # logic
         match self.state:
@@ -89,12 +87,12 @@ class Game:
                 for p in self.paddles:
                     p.draw(screen)
                 # draw score
-                ScoreCounter(str(scores[0]), score_font).draw(screen, self.bounds, True)
-                ScoreCounter(str(scores[1]), score_font).draw(screen, self.bounds, False)
+                ScoreCounter(str(scores[0]), self.score_font).draw(screen, self.bounds, True)
+                ScoreCounter(str(scores[1]), self.score_font).draw(screen, self.bounds, False)
             case Ended(winner=winner):
                 # draw background
                 screen.fill(black)
-                draw_text = score_font.render(f"Player {winner + 1} WINS!", 1, color.white)
+                draw_text = self.score_font.render(f"Player {winner + 1} WINS!", 1, color.white)
                 screen.blit(draw_text, (width / 2 - draw_text.get_width() / 2, height / 2 - draw_text.get_height() / 2))
             case _:
                 print(self.state)
@@ -106,6 +104,11 @@ class Game:
 
 
 if __name__ == "__main__":
+    ctx = Context(caption="ping", framerate=60)
+    screen = ctx.screen
+    width = ctx.width
+    height = ctx.height
+
     player_1 = Controller()
     player_2 = Controller()
 
