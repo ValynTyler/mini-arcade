@@ -4,10 +4,10 @@ from classes import color
 from classes.color import black
 from classes.controller import Controller
 from systems import emulator
-from systems.context import game_loop, Context
+from systems.context import Context
 
 if __name__ == "__main__":
-    ctx = Context(caption="ping")
+    ctx = Context(caption="ping", framerate=60)
     screen = ctx.screen
     width = ctx.width
     height = ctx.height
@@ -48,9 +48,9 @@ class Game:
 
         self.state = Running()
 
-        self.update()
+        loop = ctx.run(self.update)
+        loop()
 
-    @game_loop
     def update(self):
         # define callbacks
         def on_collide():
@@ -66,9 +66,9 @@ class Game:
         match self.state:
             case Running():
                 # move elements
-                self.paddles[0].move(player_1, self.bounds)
-                self.paddles[1].move(player_2, self.bounds)
-                self.ball.move(self.paddles, self.bounds, on_collide, on_score)
+                self.paddles[0].move(ctx.dt, player_1, self.bounds)
+                self.paddles[1].move(ctx.dt, player_2, self.bounds)
+                self.ball.move(ctx.dt, self.bounds, self.paddles, on_collide, on_score)
                 # check score
                 self.state.check_score(on_win_detected)
 

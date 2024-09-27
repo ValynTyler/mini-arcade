@@ -2,7 +2,6 @@ import pygame
 
 from classes.controller import Controller
 from systems import input_monitor
-from systems.context import game_loop
 
 if __name__ == "__main__":
     # initialize pygame
@@ -38,5 +37,5 @@ if __name__ == "__main__":
         input_monitor.update(controller)
 
 
-    loop = game_loop(run_together)
-    loop()
+    # loop = game_loop(run_together)
+    # loop()
