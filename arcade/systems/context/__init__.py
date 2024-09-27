@@ -36,4 +36,5 @@ class Context:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_ESCAPE:
                             self.running = False
+            pygame.quit()
         return inner

@@ -1,17 +1,20 @@
-import pygame
+import asyncio
+import threading
 
 from classes.controller import Controller
-from systems import emulator
+from systems.context import Context
 
-if __name__ == "__main__":
-    # initialize pygame
-    width = 700
-    height = 500
-    pygame.init()
-    screen_size = (width, height)
-    #  create a window
-    screen = pygame.display.set_mode(screen_size)
-    pygame.display.set_caption("controller emulator")
+
+async def async_task(c: Controller, stop: threading.Event):
+    while not stop.is_set():
+        await asyncio.sleep(.5)
+        c.dpad.left = True
+        await asyncio.sleep(.5)
+        c.dpad.left = False
+
+
+def start_task(c: Controller, stop: threading.Event):
+    asyncio.run(async_task(c, stop_event))
 
 
 def update(cont: Controller):
@@ -19,13 +22,15 @@ def update(cont: Controller):
 
 
 if __name__ == "__main__":
+    ctx = Context(caption="input monitor")
     controller = Controller()
+    stop_event = threading.Event()
 
+    async_thread = threading.Thread(target=start_task, args=(controller, stop_event,))
+    async_thread.start()
 
-    def run_together():
-        emulator.update(controller, False)
-        update(controller)
+    loop = ctx.run(update)
+    loop(controller)
+    stop_event.set()
 
-
-    # loop = game_loop(run_together)
-    # loop()
+    async_thread.join()
