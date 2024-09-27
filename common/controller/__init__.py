@@ -1,5 +1,5 @@
-from classes.controller.dpad import DPad
-from classes.controller.joystick import Joystick
+from common.controller.dpad import DPad
+from common.controller.joystick import Joystick
 
 
 class Controller:
@@ -7,11 +7,10 @@ class Controller:
         self.dpad: DPad = DPad()
         self.joystick = Joystick()
 
-    def print(self):
-        print(f"dpad("
-              f"{int(self.dpad.up)}"
-              f"{int(self.dpad.down)}"
-              f"{int(self.dpad.left)}"
-              f"{int(self.dpad.right)}"
-              f")"
-              )
+    def __str__(self):
+        return (f"dpad("
+                f"{int(self.dpad.up)}"
+                f"{int(self.dpad.down)}"
+                f"{int(self.dpad.left)}"
+                f"{int(self.dpad.right)}"
+                f")")
