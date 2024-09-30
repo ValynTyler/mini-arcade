@@ -5,7 +5,7 @@ from common.controller.joystick import Joystick
 class Controller:
     def __init__(self):
         self.dpad: DPad = DPad()
-        self.joystick = Joystick()
+        self.joystick: Joystick = Joystick()
 
     def __str__(self):
         return (f"dpad("
