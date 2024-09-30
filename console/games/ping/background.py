@@ -1,7 +1,7 @@
 import pygame
 from pygame import SurfaceType
 
-from classes.color import black, white
+from common.color import black, white
 
 
 class Background:

@@ -1,8 +1,8 @@
 import pygame
 from pygame import SurfaceType
 
-from classes.color import white
-from classes.controller import Controller
+from common.color import white
+from common.controller import Controller
 
 
 class Paddle:

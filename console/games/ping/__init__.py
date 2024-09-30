@@ -2,16 +2,15 @@ import pygame
 from pygame.font import Font
 from pygame.mixer import SoundType
 
-from classes import color
-from classes.color import black
-from classes.controller import Controller
-from games.ping.background import Background
-from games.ping.ball import Ball
-from games.ping.paddle import Paddle
-from games.ping.score_counter import ScoreCounter
-from games.ping.state import State, Running, Ended
-from systems import emulator
-from systems.context import Context
+from common import color
+from common.color import black
+from common.controller import Controller
+from console.games.ping.background import Background
+from console.games.ping.ball import Ball
+from console.games.ping.paddle import Paddle
+from console.games.ping.score_counter import ScoreCounter
+from console.games.ping.state import State, Running, Ended
+from common.context import Context
 
 
 class Game:
@@ -72,9 +71,6 @@ class Game:
 
         # draw
         self.draw()
-
-        emulator.update(player_1, False)
-        emulator.update(player_2, True)
 
     def draw(self):
         match self.state:

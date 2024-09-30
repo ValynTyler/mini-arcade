@@ -2,7 +2,7 @@ import pygame
 from pygame import SurfaceType
 from pygame.font import Font
 
-from classes.color import white
+from common.color import white
 
 
 class ScoreCounter:
