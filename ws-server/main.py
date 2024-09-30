@@ -4,6 +4,7 @@ from websockets.asyncio.server import serve
 async def handler(websocket):
     async for message in websocket:
         print("Message received: " + message)
+        await websocket.send(message)
 
 async def main():
     async with serve(handler, "localhost", 8765):
