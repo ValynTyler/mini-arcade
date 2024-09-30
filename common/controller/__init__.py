@@ -8,9 +8,25 @@ class Controller:
         self.joystick: Joystick = Joystick()
 
     def __str__(self):
-        return (f"dpad("
-                f"{int(self.dpad.up)}"
-                f"{int(self.dpad.down)}"
-                f"{int(self.dpad.left)}"
-                f"{int(self.dpad.right)}"
-                f")")
+        return (
+            f"dpad("
+            f"{int(self.dpad.up)}"
+            f"{int(self.dpad.down)}"
+            f"{int(self.dpad.left)}"
+            f"{int(self.dpad.right)}"
+            f")"
+        )
+
+    def serialize(self) -> str:
+        return (
+            f"{int(self.dpad.up)}"
+            f"{int(self.dpad.down)}"
+            f"{int(self.dpad.left)}"
+            f"{int(self.dpad.right)}"
+        )
+
+    def deserialize(self, data: str):
+        self.dpad.up = bool(int(data[0]))
+        self.dpad.down = bool(int(data[1]))
+        self.dpad.left = bool(int(data[2]))
+        self.dpad.right = bool(int(data[3]))

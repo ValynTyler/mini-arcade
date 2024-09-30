@@ -1,3 +1,5 @@
+from uu import Error
+
 import pygame
 from websockets.sync.client import connect
 
@@ -13,15 +15,15 @@ class Emulator:
     def start(self):
         with connect("ws://localhost:8765") as websocket:
             print("Connection established")
-            websocket.send("Sending message from emulator")
-            websocket.recv()
+            # websocket.send("Sending message from emulator")
+            # websocket.recv()
 
             self.websocket = websocket
             loop = ctx.run(self.update)
             loop()
 
     def update(self):
-        clf = self.controller.__str__()
+        clf = self.controller.serialize()
 
         keys = pygame.key.get_pressed()
         self.controller.dpad.up = keys[pygame.K_w]
@@ -29,8 +31,8 @@ class Emulator:
         self.controller.dpad.left = keys[pygame.K_a]
         self.controller.dpad.right = keys[pygame.K_d]
 
-        if clf != self.controller.__str__():
-            self.websocket.send(self.controller.__str__())
+        if clf != self.controller.serialize():
+            self.websocket.send(self.controller.serialize())
             self.websocket.recv()
 
 

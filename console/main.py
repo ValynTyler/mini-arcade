@@ -13,14 +13,16 @@ class Server:
 
     async def websocket_handler(self, websocket: ServerConnection):
         async for message in websocket:
-            print("Message received: " + message)
-            # self.controller = message
+            # print("Message received: " + message)
+            self.controller.deserialize(message)
             await websocket.send(message)
 
     async def websocket_server(self):
         async with serve(self.websocket_handler, "localhost", 8765):
             print("Starting WS server...")
-            await asyncio.get_running_loop().create_future()  # run forever
+            while not stop_event.is_set():
+                await asyncio.sleep(1)
+
 
     def run(self):
         asyncio.run(self.websocket_server())
@@ -29,9 +31,14 @@ class Server:
 if __name__ == "__main__":
     ctx = Context(caption="server")
 
+    stop_event = threading.Event()
+
     sv = Server()
     thread = threading.Thread(target=sv.run,)
     thread.start()
 
-    game = ping.Game(ctx, sv.controller, sv.controller)
+    c = Controller()
+    game = ping.Game(ctx, sv.controller, c)
     game.start()
+
+    stop_event.set()
