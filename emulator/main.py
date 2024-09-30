@@ -10,7 +10,8 @@ from common.controller import Controller
 class Emulator:
     def __init__(self):
         self.websocket = None
-        self.controller = Controller()
+        self.controller_1 = Controller()
+        self.controller_2 = Controller()
 
     def start(self):
         with connect("ws://localhost:8765") as websocket:
@@ -23,16 +24,22 @@ class Emulator:
             loop()
 
     def update(self):
-        clf = self.controller.serialize()
-
+        c1_lf = self.controller_1.serialize()
+        c2_lf = self.controller_2.serialize()
         keys = pygame.key.get_pressed()
-        self.controller.dpad.up = keys[pygame.K_w]
-        self.controller.dpad.down = keys[pygame.K_s]
-        self.controller.dpad.left = keys[pygame.K_a]
-        self.controller.dpad.right = keys[pygame.K_d]
 
-        if clf != self.controller.serialize():
-            self.websocket.send(self.controller.serialize())
+        self.controller_1.dpad.up = keys[pygame.K_w]
+        self.controller_1.dpad.down = keys[pygame.K_s]
+        self.controller_1.dpad.left = keys[pygame.K_a]
+        self.controller_1.dpad.right = keys[pygame.K_d]
+
+        self.controller_2.dpad.up = keys[pygame.K_UP]
+        self.controller_2.dpad.down = keys[pygame.K_DOWN]
+        self.controller_2.dpad.left = keys[pygame.K_LEFT]
+        self.controller_2.dpad.right = keys[pygame.K_RIGHT]
+
+        if c1_lf != self.controller_1.serialize():
+            self.websocket.send(self.controller_1.serialize())
             self.websocket.recv()
 
 
