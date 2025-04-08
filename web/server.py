@@ -14,7 +14,8 @@ def get_ip():
 
 
 def main():
-    os.chdir('./public')
+    path = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(os.path.join(path, 'public'))
 
     ip = get_ip()
     port = 8080
