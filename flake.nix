@@ -15,6 +15,8 @@
             python3
             python3Packages.pillow
             python3Packages.qrcode
+            nodejs
+            typescript
           ];
         };
       }
