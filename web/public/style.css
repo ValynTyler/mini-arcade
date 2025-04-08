@@ -8,3 +8,7 @@ body {
   align-items: center;
   justify-content: space-around;
 }
+
+canvas {
+  margin-top: 10vh;
+}
