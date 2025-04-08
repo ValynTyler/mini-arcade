@@ -25,11 +25,17 @@ def main():
     qr.add_data(addr)
     qr.make(fit=True)
 
-    print(f"Server open at {addr}")
     qr.print_ascii()
     
+    print(f"Opening server at {addr}")
     httpd = HTTPServer(('', port), SimpleHTTPRequestHandler)
-    httpd.serve_forever()
+
+    try:
+        httpd.serve_forever()
+    except:
+        httpd.server_close()
+
+    print("\nClosing server...")
 
 
 if __name__ == "__main__":
