@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "esbuild": "^0.25.2",
+    "phaser": "^3.88.2",
+    "typescript": "^5.8.3"
+  }
+}

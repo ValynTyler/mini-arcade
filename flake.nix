@@ -12,11 +12,11 @@
       let pkgs = nixpkgs.legacyPackages.${system}; in {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            esbuild
+            nodejs
             python3
             python3Packages.pillow
             python3Packages.qrcode
-            nodejs
-            typescript
           ];
         };
       }
