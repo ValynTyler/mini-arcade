@@ -75,8 +75,24 @@ export default class SquareButton extends Phaser.GameObjects.Container {
       this.area.setStrokeStyle()
     }
 
-    this.stem.setPosition(stem_position.x, stem_position.y).setSize(stem_size.width, stem_size.height)
-    this.face.setPosition(face_position.x, face_position.y).setSize(face_size.width, face_size.height)
+    this.stem.setPosition(stem_position.x, stem_position.y).setSize(stem_size.width, stem_size.height).setFillStyle(this.stem_color)
+    this.face.setPosition(face_position.x, face_position.y).setSize(face_size.width, face_size.height).setFillStyle(this.face_color)
+    this.base.setFillStyle(this.base_color)
+  }
+
+  public setBaseColor(color: number) {
+    this.base_color = color
+    return this
+  }
+
+  public setFaceColor(color: number) {
+    this.face_color = color
+    return this
+  }
+
+  public setStemColor(color: number) {
+    this.stem_color = color
+    return this
   }
 
   preUpdate() { this.update() }

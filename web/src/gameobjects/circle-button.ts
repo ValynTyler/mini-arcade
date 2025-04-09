@@ -81,9 +81,25 @@ export default class CircleButton extends Phaser.GameObjects.Container {
       this.area.setStrokeStyle()
     }
 
-    this.face.setPosition(face_position.x, face_position.y).setRadius(face_radius)
-    this.stem_circle.setPosition(stem_position.x, stem_position.y).setRadius(stem_radius)
-    this.stem_square.setPosition(stem_position.x, stem_position.y).setSize(stem_size.x, stem_size.y)
+    this.face.setPosition(face_position.x, face_position.y).setRadius(face_radius).setFillStyle(this.face_color)
+    this.stem_circle.setPosition(stem_position.x, stem_position.y).setRadius(stem_radius).setFillStyle(this.stem_color)
+    this.stem_square.setPosition(stem_position.x, stem_position.y).setSize(stem_size.x, stem_size.y).setFillStyle(this.stem_color)
+    this.base.setFillStyle(this.base_color)
+  }
+
+  public setBaseColor(color: number) {
+    this.base_color = color
+    return this
+  }
+
+  public setFaceColor(color: number) {
+    this.face_color = color
+    return this
+  }
+
+  public setStemColor(color: number) {
+    this.stem_color = color
+    return this
   }
 
   preUpdate() { this.update() }
