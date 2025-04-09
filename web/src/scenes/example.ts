@@ -5,30 +5,40 @@ export default class Example extends Phaser.Scene {
     })
   }
 
-  private size: number = 100
-  private height: number = 20
+  btn_size: number = 50
+  base_size: number = 70
+  height: number = 15
 
-  private primary_color: number = 0xff0000
-  private secondary_color: number = 0xbb0000
-  private background_color: number = 0x000000
+  private target_height: number = this.height
+  private actual_height: number = this.height
+
+  private face_color: number = 0xff0000
+  private stem_color: number = 0xbb0000
+  private base_color: number = 0x000000
 
   private face!: Phaser.GameObjects.Rectangle
   private stem!: Phaser.GameObjects.Rectangle
+  private base!: Phaser.GameObjects.Rectangle
 
-  private onPointerUp = () => {
-    this.height = 20
+  private onButtonRelease = () => {
+    this.target_height = this.height
     this.redrawUI()
   }
 
-  private onPointerDown = () => {
-    console.log('clicked!')
-    this.height = 0
+  private onButtonPress = () => {
+    this.target_height = 0
     this.redrawUI()
   }
 
   private redrawUI = () => {
-    this.stem.setPosition(0, this.size/2).setSize(this.size, this.height)
-    this.face.setPosition(0, -this.height).setSize(this.size, this.size)
+    const stem_position = { x: 0, y: this.btn_size / 2 }
+    const face_position = { x: 0, y: -this.actual_height }
+
+    const stem_size = { width: this.btn_size, height: this.actual_height }
+    const face_size = { width: this.btn_size, height: this.btn_size }
+
+    this.stem.setPosition(stem_position.x, stem_position.y).setSize(stem_size.width, stem_size.height).setFillStyle(this.stem_color)
+    this.face.setPosition(face_position.x, face_position.y).setSize(face_size.width, face_size.height).setFillStyle(this.face_color)
   }
 
   create() {
@@ -38,33 +48,41 @@ export default class Example extends Phaser.Scene {
     const asdf = 0
     const qwer = 0
 
-    const hitbox = this
+    this.base = this
       .add
-      .rectangle(0, 0, this.size, this.size)
-      .setStrokeStyle(1, 0xff00ff)
+      .rectangle(0, 0, this.base_size, this.base_size, this.base_color)
+      // .setStrokeStyle(25, this.base_color)
 
     this.face = this
       .add
-      .rectangle()
-      .setStrokeStyle(1, 0x00ff00)
+      .rectangle(0, 0, undefined, undefined, this.face_color)
+      // .setStrokeStyle(1, 0x00ff00)
       .setInteractive()
-      .on("pointerdown", this.onPointerDown)
-      .on("pointerup", this.onPointerUp)
+      .on("pointerdown", this.onButtonPress)
+      .on("pointerup", this.onButtonRelease)
+      .on("pointerout", this.onButtonRelease)
 
     this.stem = this
       .add
-      .rectangle()
-      .setStrokeStyle(1, 0x0000ff)
+      .rectangle(0, 0, 0, 0, this.stem_color)
+      // .setStrokeStyle(1, 0x0000ff)
       .setOrigin(0.5, 1)
       .setInteractive()
-      .on("pointerdown", this.onPointerDown)
-      .on("pointerup", this.onPointerUp)
+      .on("pointerdown", this.onButtonPress)
+      .on("pointerup", this.onButtonRelease)
+      .on("pointerout", this.onButtonRelease)
 
     this.add.container(50 * vw, 50 * vh, [
-      hitbox,
+      this.base,
       this.face,
       this.stem,
     ])
+
+    this.redrawUI()
+  }
+
+  update () {
+    this.actual_height = Phaser.Math.Linear(this.target_height, this.actual_height, 0.5)
 
     this.redrawUI()
   }
