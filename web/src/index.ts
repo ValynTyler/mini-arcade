@@ -4,15 +4,15 @@ import Example from './scenes/example'
 
 var config = {
   type: Phaser.AUTO,
-  parent: 'phaser-example',
+  parent: 'canvas-container',
   width: 800,
   height: 440,
-  // scale: {
-  //     mode: Phaser.Scale.FIT,
-  //     autoCenter: Phaser.Scale.CENTER_BOTH,
-  // },
-  scene: Example,
   backgroundColor: 0xbbbbbb,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
+  scene: Example,
 }
 
 var game = new Phaser.Game(config)

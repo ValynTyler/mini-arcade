@@ -9,6 +9,7 @@ body {
   justify-content: space-around;
 }
 
-canvas {
-  margin-top: 10vh;
+#canvas-container {
+  max-width: 800px;
+  max-height: 440px;
 }
