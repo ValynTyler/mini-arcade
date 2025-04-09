@@ -1,5 +1,15 @@
 import Phaser from 'phaser'
 
+const colors = {
+  red: 0xff0000,
+  grn: 0x00ff00,
+  ylw: 0xffff00,
+  blu: 0x0000ff,
+  lgr: 0x1c1c1c,
+  mgr: 0x111111,
+  dgr: 0x040404,
+}
+
 class Demo extends Phaser.Scene {
   private joystick!: any
   private menu_btn!: Phaser.GameObjects.Arc
@@ -37,39 +47,39 @@ class Demo extends Phaser.Scene {
       .add(this, {
         radius: 100,
         forceMin: 0,
-        base: this.add.circle(0, 0, 100).setStrokeStyle(2, 0xffffff),
-        thumb: this.add.circle(0, 0, 50).setStrokeStyle(2, 0xffffff),
+        base: this.add.circle(0, 0, 100, colors.mgr),
+        thumb: this.add.circle(0, 0, 50, colors.lgr).setStrokeStyle(10, colors.dgr),
       })
       .on('update', this.dumpJoyStickState, this)
 
     this.menu_btn = this
       .add
-      .circle(0, 0, 25)
-      .setStrokeStyle(2, 0xff0000)
+      .circle(0, 0, 25, colors.red)
+      .setStrokeStyle(10, colors.mgr)
       .setInteractive()
       .on('pointerdown', () => console.log('clicked menu'))
 
     this.powr_btn = this
       .add
-      .rectangle(0, 0, 50, 50)
-      .setStrokeStyle(2, 0x00ff00)
+      .rectangle(0, 0, 50, 50, colors.grn)
+      .setStrokeStyle(10, colors.mgr)
       .setInteractive()
       .on('pointerdown', () => console.log('clicked powr'))
 
     this.dpad = this
       .add
       .container(0, 0, [
-        this.add.rectangle(0, -60, 50, 50).setStrokeStyle(2, 0xff0000).setInteractive().on('pointerdown', () => console.log('clicked dpad N')),
-        this.add.rectangle(0, 60, 50, 50).setStrokeStyle(2, 0x00ff00).setInteractive().on('pointerdown', () => console.log('clicked dpad S')),
-        this.add.rectangle(60, 0, 50, 50).setStrokeStyle(2, 0xffff00).setInteractive().on('pointerdown', () => console.log('clicked dpad E')),
-        this.add.rectangle(-60, 0, 50, 50).setStrokeStyle(2, 0x0000ff).setInteractive().on('pointerdown', () => console.log('clicked dpad W')),
-        this.add.circle(0, 0, 100).setStrokeStyle(2, 0xffffff)
+        this.add.circle(0, 0, 100, colors.mgr),
+        this.add.rectangle( 0, -55, 50, 50, colors.red).setStrokeStyle(10, colors.dgr).setInteractive().on('pointerdown', () => console.log('clicked dpad N')),
+        this.add.rectangle( 0,  55, 50, 50, colors.grn).setStrokeStyle(10, colors.dgr).setInteractive().on('pointerdown', () => console.log('clicked dpad S')),
+        this.add.rectangle( 55, 0,  50, 50, colors.ylw).setStrokeStyle(10, colors.dgr).setInteractive().on('pointerdown', () => console.log('clicked dpad E')),
+        this.add.rectangle(-55, 0,  50, 50, colors.blu).setStrokeStyle(10, colors.dgr).setInteractive().on('pointerdown', () => console.log('clicked dpad W')),
       ])
 
     this.led = this
       .add
-      .circle(0, 0, 5)
-      .setStrokeStyle(2, 0xffffff)
+      .circle(0, 0, 6, 0xffffff)
+      .setStrokeStyle(4, 0x888888)
 
     this.text = this.add.text(0, 0, '')
     this.dumpJoyStickState()
