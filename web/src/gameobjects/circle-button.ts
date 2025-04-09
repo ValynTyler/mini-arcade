@@ -30,6 +30,7 @@ export default class CircleButton extends Phaser.GameObjects.Container {
       .setStrokeStyle(2, 0x00ff00)
       .setInteractive()
       .on("pointerdown", this.onButtonPress)
+      .on("pointerover", this.onButtonPress)
       .on("pointerup", this.onButtonRelease)
       .on("pointerout", this.onButtonRelease)
 
