@@ -78,3 +78,12 @@ export default class SquareButton extends Phaser.GameObjects.Container {
     this.redrawUI()
   }
 }
+
+Phaser.GameObjects.GameObjectFactory.register('squareButton', function (this: Phaser.GameObjects.GameObjectFactory, x: number, y: number) {
+  const button = new SquareButton(this.scene, x, y)
+
+  this.displayList.add(button)
+  this.updateList.add(button)
+
+  return button
+})
