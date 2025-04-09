@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 
-import Controller from './scenes/controller'
+import Example from './scenes/example'
 
 var config = {
   type: Phaser.AUTO,
@@ -11,8 +11,8 @@ var config = {
   //     mode: Phaser.Scale.FIT,
   //     autoCenter: Phaser.Scale.CENTER_BOTH,
   // },
-  scene: Controller,
-  backgroundColor: 0x1c1c1c
+  scene: Example,
+  backgroundColor: 0xbbbbbb,
 }
 
 var game = new Phaser.Game(config)
