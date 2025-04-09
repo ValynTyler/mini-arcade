@@ -1,36 +1,4 @@
 export default class SquareButton extends Phaser.GameObjects.Container {
-  constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene);
-
-    this.scene = scene;
-    this.x = x;
-    this.y = y;
-
-    this.base = this.scene.add
-      .rectangle(0, 0, this.base_size, this.base_size, this.base_color)
-
-    this.face = this.scene.add
-      .rectangle(0, 0, undefined, undefined, this.face_color)
-      .setInteractive()
-      .on("pointerdown", this.onButtonPress)
-      .on("pointerup", this.onButtonRelease)
-      .on("pointerout", this.onButtonRelease)
-
-    this.stem = this.scene.add
-      .rectangle(0, 0, 0, 0, this.stem_color)
-      .setOrigin(0.5, 1)
-      .setInteractive()
-      .on("pointerdown", this.onButtonPress)
-      .on("pointerup", this.onButtonRelease)
-      .on("pointerout", this.onButtonRelease)
-
-    this.add(this.base)
-    this.add(this.stem)
-    this.add(this.face)
-
-    this.scene.add.existing(this)
-  }
-
   btn_size: number = 50
   base_size: number = 70
   height: number = 15
@@ -42,9 +10,43 @@ export default class SquareButton extends Phaser.GameObjects.Container {
   private target_height: number = this.height
   private actual_height: number = this.height
 
+  private area!: Phaser.GameObjects.GameObject
   private face!: Phaser.GameObjects.Rectangle
   private stem!: Phaser.GameObjects.Rectangle
   private base!: Phaser.GameObjects.Rectangle
+
+  constructor(scene: Phaser.Scene, x: number, y: number, area?: Phaser.GameObjects.GameObject) {
+    super(scene);
+
+    this.scene = scene;
+    this.x = x;
+    this.y = y;
+
+    this.area = area ? area : this.scene.add
+      .circle(0, 0, this.btn_size)
+      .setStrokeStyle(2, 0x00ff00)
+      .setInteractive()
+      .on("pointerdown", this.onButtonPress)
+      .on("pointerup", this.onButtonRelease)
+      .on("pointerout", this.onButtonRelease)
+
+    this.base = this.scene.add
+      .rectangle(0, 0, this.base_size, this.base_size, this.base_color)
+
+    this.face = this.scene.add
+      .rectangle(0, 0, undefined, undefined, this.face_color)
+
+    this.stem = this.scene.add
+      .rectangle(0, 0, undefined, undefined, this.stem_color)
+      .setOrigin(0.5, 1)
+
+    this.add(this.base)
+    this.add(this.stem)
+    this.add(this.face)
+    this.add(this.area)
+
+    this.scene.add.existing(this)
+  }
 
   private onButtonRelease = () => {
     this.emit('release')
