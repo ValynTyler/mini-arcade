@@ -9,12 +9,17 @@ export default class Example extends Phaser.Scene {
   base_size: number = 70
   height: number = 15
 
+  face_color: number = 0xff0000
+  stem_color: number = 0xbb0000
+  base_color: number = 0x000000
+
   private target_height: number = this.height
   private actual_height: number = this.height
 
-  private face_color: number = 0xff0000
-  private stem_color: number = 0xbb0000
-  private base_color: number = 0x000000
+  private target_face_color: number = this.face_color
+  private target_stem_color: number = this.stem_color
+  private actual_face_color: number = this.face_color
+  private actual_stem_color: number = this.stem_color
 
   private face!: Phaser.GameObjects.Rectangle
   private stem!: Phaser.GameObjects.Rectangle
@@ -22,11 +27,13 @@ export default class Example extends Phaser.Scene {
 
   private onButtonRelease = () => {
     this.target_height = this.height
+    this.target_face_color = this.face_color
     this.redrawUI()
   }
 
   private onButtonPress = () => {
     this.target_height = 0
+    this.target_face_color = this.stem_color
     this.redrawUI()
   }
 
@@ -37,8 +44,8 @@ export default class Example extends Phaser.Scene {
     const stem_size = { width: this.btn_size, height: this.actual_height }
     const face_size = { width: this.btn_size, height: this.btn_size }
 
-    this.stem.setPosition(stem_position.x, stem_position.y).setSize(stem_size.width, stem_size.height).setFillStyle(this.stem_color)
-    this.face.setPosition(face_position.x, face_position.y).setSize(face_size.width, face_size.height).setFillStyle(this.face_color)
+    this.stem.setPosition(stem_position.x, stem_position.y).setSize(stem_size.width, stem_size.height).setFillStyle(this.actual_stem_color)
+    this.face.setPosition(face_position.x, face_position.y).setSize(face_size.width, face_size.height).setFillStyle(this.actual_face_color)
   }
 
   create() {
