@@ -1,4 +1,4 @@
-import '../gameobjects/circle'
+import '../gameobjects/circle-button'
 import '../gameobjects/square-button'
 
 export default class Example extends Phaser.Scene {
