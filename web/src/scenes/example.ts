@@ -3,9 +3,7 @@ import '../gameobjects/square-button'
 
 export default class Example extends Phaser.Scene {
   constructor() {
-    super({
-      key: 'examples'
-    })
+    super()
   }
 
   create() {
@@ -14,10 +12,10 @@ export default class Example extends Phaser.Scene {
 
     const circle_button = (this.add as any)
       .circleButton(30 * vw, 50 * vh)
-      .on('press', () => console.log('hey watch it! >:('))
+      .on('press', () => console.log('circle button'))
 
     const square_button = (this.add as any)
       .squareButton(70 * vw, 50 * vh)
-      .on('press', () => console.log('hey watch it! >:('))
+      .on('press', () => console.log('square button'))
   }
 }
