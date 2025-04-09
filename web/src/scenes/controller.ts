@@ -32,6 +32,8 @@ export default class Controller extends Phaser.Scene {
   }
 
   create() {
+    this.input.addPointer(10); // if you manage to need more pointers than most people have fingers, I'll be truly impressed.
+
     this.joystick = (this
       .plugins
       .get('rexvirtualjoystickplugin') as any)
