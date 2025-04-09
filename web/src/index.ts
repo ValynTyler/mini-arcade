@@ -34,7 +34,12 @@ class Demo extends Phaser.Scene {
     this.joystick = (this
       .plugins
       .get('rexvirtualjoystickplugin') as any)
-      .add(this, { radius: 100, forceMin: 0, })
+      .add(this, {
+        radius: 100,
+        forceMin: 0,
+        base: this.add.circle(0, 0, 100).setStrokeStyle(2, 0xffffff),
+        thumb: this.add.circle(0, 0, 50).setStrokeStyle(2, 0xffffff),
+      })
       .on('update', this.dumpJoyStickState, this)
 
     this.menu_btn = this
@@ -55,9 +60,10 @@ class Demo extends Phaser.Scene {
       .add
       .container(0, 0, [
         this.add.rectangle(0, -60, 50, 50).setStrokeStyle(2, 0xff0000).setInteractive().on('pointerdown', () => console.log('clicked dpad N')),
-        this.add.rectangle(0,  60, 50, 50).setStrokeStyle(2, 0xff0000).setInteractive().on('pointerdown', () => console.log('clicked dpad S')),
-        this.add.rectangle( 60, 0, 50, 50).setStrokeStyle(2, 0xff0000).setInteractive().on('pointerdown', () => console.log('clicked dpad E')),
-        this.add.rectangle(-60, 0, 50, 50).setStrokeStyle(2, 0xff0000).setInteractive().on('pointerdown', () => console.log('clicked dpad W')),
+        this.add.rectangle(0, 60, 50, 50).setStrokeStyle(2, 0x00ff00).setInteractive().on('pointerdown', () => console.log('clicked dpad S')),
+        this.add.rectangle(60, 0, 50, 50).setStrokeStyle(2, 0xffff00).setInteractive().on('pointerdown', () => console.log('clicked dpad E')),
+        this.add.rectangle(-60, 0, 50, 50).setStrokeStyle(2, 0x0000ff).setInteractive().on('pointerdown', () => console.log('clicked dpad W')),
+        this.add.circle(0, 0, 100).setStrokeStyle(2, 0xffffff)
       ])
 
     this.led = this
@@ -105,7 +111,7 @@ var config = {
   //     autoCenter: Phaser.Scale.CENTER_BOTH,
   // },
   scene: Demo,
-  backgroundColor: 0x333333
+  backgroundColor: 0x1c1c1c
 }
 
 var game = new Phaser.Game(config)
