@@ -47,11 +47,13 @@ export default class SquareButton extends Phaser.GameObjects.Container {
   private base!: Phaser.GameObjects.Rectangle
 
   private onButtonRelease = () => {
+    this.emit('release')
     this.target_height = this.height
     this.redrawUI()
   }
 
   private onButtonPress = () => {
+    this.emit('press')
     this.target_height = 0
     this.redrawUI()
   }

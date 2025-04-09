@@ -11,7 +11,9 @@ export default class Example extends Phaser.Scene {
     const vw = this.game.config.width as number / 100
     const vh = this.game.config.height as number / 100
 
-    const square_button = (this.add as any).squareButton(50 * vw, 50 * vh)
+    const square_button = (this.add as any)
+      .squareButton(50 * vw, 50 * vh)
+      .on('press', () => console.log('hey watch it! >:('))
   }
 }
 
