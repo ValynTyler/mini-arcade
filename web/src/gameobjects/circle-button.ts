@@ -1,4 +1,6 @@
 export default class CircleButton extends Phaser.GameObjects.Container {
+  area_visible: boolean = false
+
   btn_diameter: number = 50
   base_diameter: number = 70
   height: number = 15
@@ -10,13 +12,13 @@ export default class CircleButton extends Phaser.GameObjects.Container {
   private target_height: number = this.height
   private actual_height: number = this.height
 
-  private area!: Phaser.GameObjects.GameObject
+  private area!: Phaser.GameObjects.Shape
   private face!: Phaser.GameObjects.Arc
   private base!: Phaser.GameObjects.Arc
   private stem_circle!: Phaser.GameObjects.Arc
   private stem_square!: Phaser.GameObjects.Rectangle
 
-  constructor(scene: Phaser.Scene, x: number, y: number, area?: Phaser.GameObjects.GameObject) {
+  constructor(scene: Phaser.Scene, x: number, y: number, area?: Phaser.GameObjects.Shape) {
     super(scene);
 
     this.scene = scene;
@@ -72,6 +74,12 @@ export default class CircleButton extends Phaser.GameObjects.Container {
     const stem_size = { x: this.btn_diameter, y: this.actual_height }
     const stem_radius = this.btn_diameter / 2
     const face_radius = this.btn_diameter / 2
+
+    if (this.area_visible) {
+      this.area.setStrokeStyle(2, 0x00ff00)
+    } else {
+      this.area.setStrokeStyle()
+    }
 
     this.face.setPosition(face_position.x, face_position.y).setRadius(face_radius)
     this.stem_circle.setPosition(stem_position.x, stem_position.y).setRadius(stem_radius)

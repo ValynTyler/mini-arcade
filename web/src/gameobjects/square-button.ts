@@ -1,4 +1,6 @@
 export default class SquareButton extends Phaser.GameObjects.Container {
+  area_visible = false
+
   btn_size: number = 50
   base_size: number = 70
   height: number = 15
@@ -10,12 +12,12 @@ export default class SquareButton extends Phaser.GameObjects.Container {
   private target_height: number = this.height
   private actual_height: number = this.height
 
-  private area!: Phaser.GameObjects.GameObject
+  private area!: Phaser.GameObjects.Shape
   private face!: Phaser.GameObjects.Rectangle
   private stem!: Phaser.GameObjects.Rectangle
   private base!: Phaser.GameObjects.Rectangle
 
-  constructor(scene: Phaser.Scene, x: number, y: number, area?: Phaser.GameObjects.GameObject) {
+  constructor(scene: Phaser.Scene, x: number, y: number, area?: Phaser.GameObjects.Shape) {
     super(scene);
 
     this.scene = scene;
@@ -66,6 +68,12 @@ export default class SquareButton extends Phaser.GameObjects.Container {
 
     const stem_size = { width: this.btn_size, height: this.actual_height }
     const face_size = { width: this.btn_size, height: this.btn_size }
+
+    if (this.area_visible) {
+      this.area.setStrokeStyle(2, 0x00ff00)
+    } else {
+      this.area.setStrokeStyle()
+    }
 
     this.stem.setPosition(stem_position.x, stem_position.y).setSize(stem_size.width, stem_size.height)
     this.face.setPosition(face_position.x, face_position.y).setSize(face_size.width, face_size.height)
