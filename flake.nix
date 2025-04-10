@@ -15,8 +15,9 @@
             esbuild
             nodejs
             python3
-            python3Packages.pillow
             python3Packages.qrcode
+            python3Packages.pillow
+            python3Packages.websockets
           ];
         };
       }
