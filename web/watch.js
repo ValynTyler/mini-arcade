@@ -11,7 +11,8 @@ const __dirname = path.dirname(__filename);
 let ctx = await esbuild.context({
   entryPoints: [ path.join(__dirname, 'src/index.ts') ],
   bundle: true,
-  outdir: path.join(__dirname, 'public'),
+  minify: true,
+  outfile: path.join(__dirname, 'public', 'bundle.min.js'),
 })
 
 await ctx.watch()
