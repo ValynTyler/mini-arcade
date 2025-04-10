@@ -7,7 +7,7 @@ export default class Controller extends Phaser.Scene {
   menu = false
   power = false
 
-  enableDebug: boolean = true
+  enableDebug: boolean = false
   private pressTime: number = 0
   private debugText!: Phaser.GameObjects.Text
 
