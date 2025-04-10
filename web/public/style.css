@@ -3,8 +3,25 @@
 }
 
 body {
+  margin: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+}
+
+form {
+  display: grid;
+  gap: .2em;
+}
+
+button {
+  grid-column: span 2;
+}
+
+.row {
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: subgrid;
+  column-gap: 1em;
 }

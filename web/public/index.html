@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
   <title>Document</title>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <div>
-    <label for="count">Count:</label>
-    <button id="count">0</button>
-  </div>
+  <h1>Connect over WS</h1>
+  <form method="dialog">
+    <div class="row">
+      <label for="host">host:</label>
+      <input type="text" name="host" id="host" placeholder="localhost" />
+    </div>
+    <div class="row">
+      <label for="port">port:</label>
+      <input type="text" name="port" id="port" placeholder="8765" minlength="4" maxlength="4" />
+    </div>
+    <br>
+    <button id="connect">Connect</button>
+  </form>
   <script src="index.js"></script>
 </body>
 </html>
