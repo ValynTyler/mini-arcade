@@ -13,13 +13,14 @@ body {
 form {
   display: grid;
   gap: .2em;
+  margin-bottom: 1em;
 }
 
 button {
   grid-column: span 2;
 }
 
-button.hidden {
+.hidden {
   display: none;
 }
 
@@ -28,4 +29,19 @@ button.hidden {
   grid-column: span 2;
   grid-template-columns: subgrid;
   column-gap: 1em;
+}
+
+.error {
+  color: brown;
+  animation: 200ms 2 error-shake
+}
+
+@keyframes error-shake {
+  25% {
+      transform: translate(10px);
+  }
+
+  75% {
+      transform: translate(-10px);
+  }
 }
