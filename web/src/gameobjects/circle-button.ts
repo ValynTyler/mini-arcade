@@ -29,10 +29,14 @@ export default class CircleButton extends Phaser.GameObjects.Container {
       .circle(0, 0, this.btn_diameter)
       .setStrokeStyle(2, 0x00ff00)
       .setInteractive()
-      .on("pointerdown", this.onButtonPress)
-      .on("pointerover", this.onButtonPress)
       .on("pointerup", this.onButtonRelease)
+      .on("pointerdown", this.onButtonPress)
       .on("pointerout", this.onButtonRelease)
+      .on("pointerover", (pointer: any) => {
+        if (pointer.wasTouch) {
+          this.onButtonPress()
+        }
+      })
 
     this.base = this.scene.add
       .circle(0, 0, this.base_diameter / 2, this.base_color)
