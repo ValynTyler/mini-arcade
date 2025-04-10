@@ -2,13 +2,13 @@ import CircleButton from "../gameobjects/circle-button"
 import SquareButton from "../gameobjects/square-button"
 
 export default class Controller extends Phaser.Scene {
-  showDebugText: boolean = true
-
   joystick = { x: 0, y: 0 }
   dpad = { up: false, down: false, left: false, right: false }
   menu = false
   power = false
 
+  showDebugText: boolean = false
+  private pressTime: number = 0
   private debugText!: Phaser.GameObjects.Text
 
   private joystick_input!: any
@@ -59,10 +59,18 @@ export default class Controller extends Phaser.Scene {
       })
 
     this.menu_button = new CircleButton(this, 0, 0)
-      .on('release', () => this.menu = false)
+      .on('release', () => {
+        this.menu = false
+        let releaseTime = Date.now()
+        let timeHeld = releaseTime - this.pressTime
+        if (timeHeld > 3000) {
+          this.showDebugText = !this.showDebugText
+        }
+      })
       .on('press', () => {
         console.log('pressed menu')
         this.menu = true
+        this.pressTime = Date.now()
       })
 
     this.power_button = new SquareButton(this, 0, 0)
@@ -78,10 +86,10 @@ export default class Controller extends Phaser.Scene {
       .add
       .container(0, 0, [
         this.add.circle(0, 0, 125, 0x111111),
-        new SquareButton(this, 0, -75).on('press', () => { console.log('pressed dpad up');    this.dpad.up =    true }).on('release', () => this.dpad.up = false),
-        new SquareButton(this, 0,  75).on('press', () => { console.log('pressed dpad down');  this.dpad.down =  true }).on('release', () => this.dpad.down = false),
-        new SquareButton(this, -75, 0).on('press', () => { console.log('pressed dpad left');  this.dpad.left =  true }).on('release', () => this.dpad.left = false),
-        new SquareButton(this,  75, 0).on('press', () => { console.log('pressed dpad right'); this.dpad.right = true }).on('release', () => this.dpad.right = false),
+        new SquareButton(this, 0, -75).on('press', () => { console.log('pressed dpad up'); this.dpad.up = true }).on('release', () => this.dpad.up = false),
+        new SquareButton(this, 0, 75).on('press', () => { console.log('pressed dpad down'); this.dpad.down = true }).on('release', () => this.dpad.down = false),
+        new SquareButton(this, -75, 0).on('press', () => { console.log('pressed dpad left'); this.dpad.left = true }).on('release', () => this.dpad.left = false),
+        new SquareButton(this, 75, 0).on('press', () => { console.log('pressed dpad right'); this.dpad.right = true }).on('release', () => this.dpad.right = false),
       ])
 
     this.led_indicator = this
@@ -89,29 +97,31 @@ export default class Controller extends Phaser.Scene {
       .circle(0, 0, 8, 0xffffff)
       .setStrokeStyle(4, 0xbbbbbb)
 
-    if (this.showDebugText) {
-      this.debugText = this.add
-        .text(0, 0, '[debug mode]')
-    }
+    this.debugText = this.add
+      .text(0, 0, '')
 
     this.scale.on('resize', this.positionUI)
     this.positionUI()
   }
 
   update() {
-    let s = `[debug mode]\n`
-      + `\n`
-      + `joystick x: ${this.joystick.x}\n`
-      + `joystick y: ${this.joystick.y}\n`
-      + `\n`
-      + `dpad:\n`
-      + `  up:    ${this.dpad.up}\n`
-      + `  down:  ${this.dpad.down}\n`
-      + `  left:  ${this.dpad.left}\n`
-      + `  right: ${this.dpad.right}\n`
-      + `\n`
-      + `menu: ${this.menu}\n`
-      + `power: ${this.power}\n`
+    let s = ''
+
+    if (this.showDebugText) {
+      s = `[debug mode]\n`
+        + `\n`
+        + `joystick x: ${this.joystick.x}\n`
+        + `joystick y: ${this.joystick.y}\n`
+        + `\n`
+        + `dpad:\n`
+        + `  up:    ${this.dpad.up}\n`
+        + `  down:  ${this.dpad.down}\n`
+        + `  left:  ${this.dpad.left}\n`
+        + `  right: ${this.dpad.right}\n`
+        + `\n`
+        + `menu: ${this.menu}\n`
+        + `power: ${this.power}\n`
+    }
 
     this.debugText.setText(s)
   }
