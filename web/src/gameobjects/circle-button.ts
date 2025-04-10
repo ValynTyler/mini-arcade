@@ -9,6 +9,8 @@ export default class CircleButton extends Phaser.GameObjects.Container {
   stem_color: number = 0xbb0000
   base_color: number = 0x000000
 
+  pressed: boolean = false
+
   private target_height: number = this.height
   private actual_height: number = this.height
 
@@ -31,7 +33,9 @@ export default class CircleButton extends Phaser.GameObjects.Container {
       .setInteractive()
       .on("pointerup", this.onButtonRelease)
       .on("pointerdown", this.onButtonPress)
-      .on("pointerout", this.onButtonRelease)
+      .on("pointerout", () => {
+        if (this.pressed) { this.onButtonRelease() }
+      })
       .on("pointerover", (pointer: any) => {
         if (pointer.wasTouch) {
           this.onButtonPress()
@@ -61,12 +65,14 @@ export default class CircleButton extends Phaser.GameObjects.Container {
   }
 
   private onButtonRelease = () => {
+    this.pressed = false
     this.emit('release')
     this.target_height = this.height
     this.redrawUI()
   }
 
   private onButtonPress = () => {
+    this.pressed = true
     this.emit('press')
     this.target_height = 0
     this.redrawUI()
