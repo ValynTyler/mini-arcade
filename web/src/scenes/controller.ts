@@ -7,7 +7,7 @@ export default class Controller extends Phaser.Scene {
   menu = false
   power = false
 
-  showDebugText: boolean = false
+  enableDebug: boolean = true
   private pressTime: number = 0
   private debugText!: Phaser.GameObjects.Text
 
@@ -64,7 +64,7 @@ export default class Controller extends Phaser.Scene {
         let releaseTime = Date.now()
         let timeHeld = releaseTime - this.pressTime
         if (timeHeld > 3000) {
-          this.showDebugText = !this.showDebugText
+          this.enableDebug = !this.enableDebug
         }
       })
       .on('press', () => {
@@ -107,7 +107,13 @@ export default class Controller extends Phaser.Scene {
   update() {
     let s = ''
 
-    if (this.showDebugText) {
+    if (this.enableDebug) {
+      this.menu_button.area_visible = true;
+      this.power_button.area_visible = true;
+      this.dpad_input.each((child: any) => {
+        child.area_visible = true;
+      })
+
       s = `[debug mode]\n`
         + `\n`
         + `joystick x: ${this.joystick.x}\n`
@@ -121,6 +127,12 @@ export default class Controller extends Phaser.Scene {
         + `\n`
         + `menu: ${this.menu}\n`
         + `power: ${this.power}\n`
+    } else {
+      this.menu_button.area_visible = false;
+      this.power_button.area_visible = false;
+      this.dpad_input.each((child: any) => {
+        child.area_visible = false;
+      })
     }
 
     this.debugText.setText(s)

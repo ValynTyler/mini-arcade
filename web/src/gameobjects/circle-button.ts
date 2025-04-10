@@ -29,7 +29,7 @@ export default class CircleButton extends Phaser.GameObjects.Container {
 
     this.area = area ? area : this.scene.add
       .circle(0, 0, this.btn_diameter)
-      .setStrokeStyle(2, 0x00ff00)
+      .setStrokeStyle(2, 0xffffff)
       .setInteractive()
       .on("pointerup", this.onButtonRelease)
       .on("pointerdown", this.onButtonPress)
@@ -87,7 +87,7 @@ export default class CircleButton extends Phaser.GameObjects.Container {
     const face_radius = this.btn_diameter / 2
 
     if (this.area_visible) {
-      this.area.setStrokeStyle(2, 0x00ff00)
+      this.area.setStrokeStyle(2, 0xffffff)
     } else {
       this.area.setStrokeStyle()
     }

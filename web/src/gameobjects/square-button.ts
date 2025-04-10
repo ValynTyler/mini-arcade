@@ -28,7 +28,7 @@ export default class SquareButton extends Phaser.GameObjects.Container {
 
     this.area = area ? area : this.scene.add
       .circle(0, 0, this.btn_size)
-      .setStrokeStyle(2, 0x00ff00)
+      .setStrokeStyle(2, 0xffffff)
       .setInteractive()
       .on("pointerup", this.onButtonRelease)
       .on("pointerdown", this.onButtonPress)
@@ -81,7 +81,7 @@ export default class SquareButton extends Phaser.GameObjects.Container {
     const face_size = { width: this.btn_size, height: this.btn_size }
 
     if (this.area_visible) {
-      this.area.setStrokeStyle(2, 0x00ff00)
+      this.area.setStrokeStyle(2, 0xffffff)
     } else {
       this.area.setStrokeStyle()
     }
