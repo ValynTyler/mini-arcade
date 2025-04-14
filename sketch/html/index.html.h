@@ -5,6 +5,7 @@ static const char *htmlContent PROGMEM = R"(
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="style.css">
     <title>Sample HTML</title>
 </head>
 <body>
