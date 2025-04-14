@@ -9,6 +9,9 @@ install:
 	@ arduino-cli config init --overwrite
 	@ arduino-cli core update-index
 	@ arduino-cli core install esp32:esp32
+	@ arduino-cli lib update-index
+	@ arduino-cli lib install "ESP Async WebServer"
+	@ arduino-cli lib install "Async TCP"
 
 compile:
 	@ arduino-cli compile --fqbn $(FQBN) $(SKETCH)
