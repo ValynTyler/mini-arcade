@@ -5,8 +5,8 @@
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
 
-#include "html/bundle.min.js.h"
 #include "html/index.html.h"
+#include "html/script.js.h"
 #include "html/style.css.h"
 
 static AsyncWebServer server(80);
@@ -22,16 +22,16 @@ void setup() {
   LittleFS.begin(true);
 
   {
-    File f = LittleFS.open("/bundle.min.js", "w");
+    File f = LittleFS.open("/index.html", "w");
     assert(f);
-    f.print(jsContent);
+    f.print(htmlContent);
     f.close();
   }
 
   {
-    File f = LittleFS.open("/index.html", "w");
+    File f = LittleFS.open("/script.js", "w");
     assert(f);
-    f.print(htmlContent);
+    f.print(jsContent);
     f.close();
   }
 
@@ -48,8 +48,8 @@ void setup() {
   });
 
   // curl -v http://192.168.4.1/index.html
-  server.serveStatic("/bundle.min.js", LittleFS, "/bundle.min.js");
   server.serveStatic("/index.html", LittleFS, "/index.html");
+  server.serveStatic("/script.js", LittleFS, "/script.js");
   server.serveStatic("/style.css", LittleFS, "/style.css");
 
   server.begin();

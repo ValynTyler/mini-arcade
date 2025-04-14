@@ -14,6 +14,7 @@ install:
 	@ arduino-cli lib install "Async TCP"
 
 compile:
+	@ nu source.nu
 	@ arduino-cli compile --fqbn $(FQBN) $(SKETCH)
 
 upload:
