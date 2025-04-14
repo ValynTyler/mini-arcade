@@ -1,86 +1,14 @@
-// SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright 2016-2025 Hristo Gochkov, Mathieu Carbou, Emil Muratov
-
-//
-// Shows how to serve a static file
-//
-
 #include <Arduino.h>
-#ifdef ESP32
 #include <AsyncTCP.h>
 #include <WiFi.h>
-#elif defined(ESP8266)
-#include <ESP8266WiFi.h>
-#include <ESPAsyncTCP.h>
-#elif defined(TARGET_RP2040) || defined(TARGET_RP2350) || defined(PICO_RP2040) || defined(PICO_RP2350)
-#include <RPAsyncTCP.h>
-#include <WiFi.h>
-#endif
 
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
 
-static AsyncWebServer server(80);
+#include "html/index.html.h"
+#include "html/bundle.min.js.h"
 
-static const char *htmlContent PROGMEM = R"(
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Sample HTML</title>
-</head>
-<body>
-    <h1>Hello, World!</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin euismod, purus a euismod
-    rhoncus, urna ipsum cursus massa, eu dictum tellus justo ac justo. Quisque ullamcorper
-    arcu nec tortor ullamcorper, vel fermentum justo fermentum. Vivamus sed velit ut elit
-    accumsan congue ut ut enim. Ut eu justo eu lacus varius gravida ut a tellus. Nulla facilisi.
-    Integer auctor consectetur ultricies. Fusce feugiat, mi sit amet bibendum viverra, orci leo
-    dapibus elit, id varius sem dui id lacus.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin euismod, purus a euismod
-    rhoncus, urna ipsum cursus massa, eu dictum tellus justo ac justo. Quisque ullamcorper
-    arcu nec tortor ullamcorper, vel fermentum justo fermentum. Vivamus sed velit ut elit
-    accumsan congue ut ut enim. Ut eu justo eu lacus varius gravida ut a tellus. Nulla facilisi.
-    Integer auctor consectetur ultricies. Fusce feugiat, mi sit amet bibendum viverra, orci leo
-    dapibus elit, id varius sem dui id lacus.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin euismod, purus a euismod
-    rhoncus, urna ipsum cursus massa, eu dictum tellus justo ac justo. Quisque ullamcorper
-    arcu nec tortor ullamcorper, vel fermentum justo fermentum. Vivamus sed velit ut elit
-    accumsan congue ut ut enim. Ut eu justo eu lacus varius gravida ut a tellus. Nulla facilisi.
-    Integer auctor consectetur ultricies. Fusce feugiat, mi sit amet bibendum viverra, orci leo
-    dapibus elit, id varius sem dui id lacus.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin euismod, purus a euismod
-    rhoncus, urna ipsum cursus massa, eu dictum tellus justo ac justo. Quisque ullamcorper
-    arcu nec tortor ullamcorper, vel fermentum justo fermentum. Vivamus sed velit ut elit
-    accumsan congue ut ut enim. Ut eu justo eu lacus varius gravida ut a tellus. Nulla facilisi.
-    Integer auctor consectetur ultricies. Fusce feugiat, mi sit amet bibendum viverra, orci leo
-    dapibus elit, id varius sem dui id lacus.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin euismod, purus a euismod
-    rhoncus, urna ipsum cursus massa, eu dictum tellus justo ac justo. Quisque ullamcorper
-    arcu nec tortor ullamcorper, vel fermentum justo fermentum. Vivamus sed velit ut elit
-    accumsan congue ut ut enim. Ut eu justo eu lacus varius gravida ut a tellus. Nulla facilisi.
-    Integer auctor consectetur ultricies. Fusce feugiat, mi sit amet bibendum viverra, orci leo
-    dapibus elit, id varius sem dui id lacus.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin euismod, purus a euismod
-    rhoncus, urna ipsum cursus massa, eu dictum tellus justo ac justo. Quisque ullamcorper
-    arcu nec tortor ullamcorper, vel fermentum justo fermentum. Vivamus sed velit ut elit
-    accumsan congue ut ut enim. Ut eu justo eu lacus varius gravida ut a tellus. Nulla facilisi.
-    Integer auctor consectetur ultricies. Fusce feugiat, mi sit amet bibendum viverra, orci leo
-    dapibus elit, id varius sem dui id lacus.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin euismod, purus a euismod
-    rhoncus, urna ipsum cursus massa, eu dictum tellus justo ac justo. Quisque ullamcorper
-    arcu nec tortor ullamcorper, vel fermentum justo fermentum. Vivamus sed velit ut elit
-    accumsan congue ut ut enim. Ut eu justo eu lacus varius gravida ut a tellus. Nulla facilisi.
-    Integer auctor consectetur ultricies. Fusce feugiat, mi sit amet bibendum viverra, orci leo
-    dapibus elit, id varius sem dui id lacus.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin euismod, purus a euismod
-    rhoncus, urna ipsum cursus massa, eu dictum tellus justo ac justo. Quisque ullamcorper
-    arcu nec tortor ullamcorper, vel fermentum justo fermentum. Vivamus sed velit ut elit
-    accumsan congue ut ut enim. Ut eu justo eu lacus varius gravida ut a tellus. Nulla facilisi.
-    Integer auctor consectetur ultricies. Fusce feugiat, mi sit amet bibendum viverra, orci leo
-    dapibus elit, id varius sem dui id lacus.</p>
-</body>
-</html>
-)";
+static AsyncWebServer server(80);
 
 static const size_t htmlContentLength = strlen_P(htmlContent);
 
@@ -92,16 +20,19 @@ void setup() {
   WiFi.softAP("esp-captive");
 #endif
 
-#ifdef ESP32
   LittleFS.begin(true);
-#else
-  LittleFS.begin();
-#endif
 
   {
     File f = LittleFS.open("/index.html", "w");
     assert(f);
     f.print(htmlContent);
+    f.close();
+  }
+
+  {
+    File f = LittleFS.open("/bundle.min.js", "w");
+    assert(f);
+    f.print(jsContent);
     f.close();
   }
 
@@ -128,6 +59,7 @@ void setup() {
 
   // curl -v http://192.168.4.1/index.html
   server.serveStatic("/index.html", LittleFS, "/index.html");
+  server.serveStatic("/bundle.min.js", LittleFS, "/bundle.min.js");
 
   // Example to serve a directory content
   // curl -v http://192.168.4.1/base/ => serves a.txt
