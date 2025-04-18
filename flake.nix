@@ -30,8 +30,11 @@
           buildInputs = with pkgs; [
             self.packages.${system}.mklittlefs
             arduino-cli
+            esbuild
             esptool
+            nodejs
             python3
+            typescript
             websocat
           ];
         };
