@@ -79,7 +79,7 @@ void setup() {
 }
 
 static uint32_t lastWS = 0;
-static uint32_t deltaWS = 100;
+static uint32_t deltaWS = 10;
 
 static uint32_t lastHeap = 0;
 
@@ -87,7 +87,6 @@ void loop() {
   uint32_t now = millis();
 
   if (now - lastWS >= deltaWS) {
-    Serial.printf("uptime: %.2f seconds\n", now / 1000.0);
     ws.printfAll("%u", now);
     lastWS = millis();
   }
@@ -98,9 +97,7 @@ void loop() {
     // this can be called to also set a soft limit on the number of connected clients
     ws.cleanupClients(2);  // no more than 2 clients
 
-#ifdef ESP32
     Serial.printf("Free heap: %" PRIu32 "\n", ESP.getFreeHeap());
-#endif
     lastHeap = now;
   }
 }
