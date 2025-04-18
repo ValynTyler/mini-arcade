@@ -36,7 +36,7 @@ void setup() {
       ws.textAll("new client connected");
       Serial.println("ws connect");
       client->setCloseClientOnQueueFull(false);
-      client->ping();
+      client->keepAlivePeriod(5000);
 
     } else if (type == WS_EVT_DISCONNECT) {
       ws.textAll("client disconnected");
