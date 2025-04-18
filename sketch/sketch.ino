@@ -87,7 +87,8 @@ void loop() {
   uint32_t now = millis();
 
   if (now - lastWS >= deltaWS) {
-    ws.printfAll("kp%.4f", (10.0 / 3.0));
+    Serial.printf("uptime: %.2f seconds\n", now / 1000.0);
+    ws.printfAll("%u", now);
     lastWS = millis();
   }
 
