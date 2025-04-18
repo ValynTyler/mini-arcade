@@ -19,6 +19,7 @@
             arduino-cli
             esptool
             python3
+            websocat
           ];
         };
       }
