@@ -11,7 +11,7 @@ install:
 	@ arduino-cli core install esp32:esp32
 
 compile:
-	@ arduino-cli compile --fqbn $(FQBN) $(SKETCH)
+	@ arduino-cli compile --fqbn $(FQBN) --libraries $(SKETCH)/lib $(SKETCH)
 
 upload:
 	@ arduino-cli upload -p $(PORT) --fqbn $(FQBN) $(SKETCH)
