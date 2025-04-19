@@ -11,11 +11,17 @@ void setup() {
 void loop() {
   c.poll();
 
-  Serial.println(c.get_menu());
+  Serial.print("controller: { dpad: ");
+  Serial.print(c.dpad());
+  Serial.print(", joystick: ");
+  Serial.print(c.joystick());
+  Serial.println(" }");
 
-  if (!c.get_menu()) {
-    c.set_motor(255);
-  } else {
+  if (c.menu()) {
     c.set_motor(0);
+  } else {
+    c.set_motor(255);
   }
+
+  delay(10);
 }
