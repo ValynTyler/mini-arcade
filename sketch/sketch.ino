@@ -9,7 +9,7 @@ void setup() {
 void loop() {
   Controller c = Controller::read();
 
-  Serial.println(c);
+  Serial.println(String(c.serialize(), BIN));
 
   delay(10);
 }

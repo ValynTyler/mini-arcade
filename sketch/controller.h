@@ -55,6 +55,20 @@ struct Controller {
       + String()
     ;
   }
+
+  uint32_t serialize() {
+    return 0x0000'0000
+      | (0b11         << 30)
+      | (joystick.sw  << 29)
+      | (menu         << 28)
+      | (joystick.x   << 16)
+      | (dpad.up      << 15)
+      | (dpad.down    << 14)
+      | (dpad.left    << 13)
+      | (dpad.right   << 12)
+      | (joystick.y)
+    ;
+  }
 };
 
 #endif
