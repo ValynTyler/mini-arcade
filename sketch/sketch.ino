@@ -1,30 +1,15 @@
-#include "dpad.h"
-#include "joystick.h"
+#include "controller.h"
 
 void setup() {
   Serial.begin(115200);
 
-  pinMode(13, INPUT_PULLUP);
-
-  DPad::init();
-  Joystick::init();
+  Controller::init();
 }
 
 void loop() {
-  bool menu = digitalRead(13);
+  Controller c = Controller::read();
 
-  DPad dpad = DPad::read();
-  Joystick joystick = Joystick::read();
-
-  Serial.print("controller: ");
-  Serial.print("{ menu: ");
-  Serial.print(menu);
-  Serial.print(", dpad: ");
-  Serial.print(dpad);
-  Serial.print(", joystick: ");
-  Serial.print(joystick);
-  Serial.print(" }");
-  Serial.println();
+  Serial.println(c);
 
   delay(10);
 }
