@@ -11,6 +11,7 @@ install:
 	@ arduino-cli core install esp32:esp32
 
 compile:
+	@ nu secrets.nu
 	@ arduino-cli compile --fqbn $(FQBN) $(SKETCH)
 
 upload:
