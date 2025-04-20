@@ -6,9 +6,11 @@ SKETCH = sketch
 default: compile upload monitor
 
 install:
-	@ arduino-cli config init
+	@ arduino-cli config init --overwrite
 	@ arduino-cli core update-index
 	@ arduino-cli core install esp32:esp32
+	@ arduino-cli lib update-index
+	@ arduino-cli lib install "WebSockets"
 
 compile:
 	@ nu secrets.nu

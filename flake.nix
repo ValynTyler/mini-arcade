@@ -15,6 +15,7 @@
             arduino-cli
             nushell
             python3
+            python3Packages.websockets
           ];
         };
       }
