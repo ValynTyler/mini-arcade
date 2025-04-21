@@ -1,6 +1,7 @@
 #include <WiFi.h>
 #include <WebSocketsClient.h>
 
+#include "controller.h"
 #include "secrets.h"
 
 WebSocketsClient client;
@@ -17,16 +18,19 @@ void setup() {
 
   init_wifi();
   init_ws();
+
+  Controller::init();
 }
 
 void loop() {
   client.loop();
+  Controller c = Controller::read();
 
   time_ms = millis();
   if (time_ms - last_ms > send_interval_ms) {
     last_ms = time_ms;
 
-    String message = String(time_ms);
+    String message = c.toString();
     client.sendTXT(message);
   }
 }
