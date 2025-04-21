@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 
 import asyncio
+import struct
 from websockets.asyncio.server import serve
 
 
 async def echo(websocket):
   async for message in websocket:
-    print('Message received: ' + message)
+    value = struct.unpack('<I', message)[0]
+    print('Controller state:', bin(value))
     await websocket.send(message)
 
 

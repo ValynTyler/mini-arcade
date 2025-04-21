@@ -30,8 +30,8 @@ void loop() {
   if (time_ms - last_ms > send_interval_ms) {
     last_ms = time_ms;
 
-    String message = c.toString();
-    client.sendTXT(message);
+    uint32_t c_state = c.serialize();
+    client.sendBIN((uint8_t *)&c_state, sizeof(c_state));
   }
 }
 
