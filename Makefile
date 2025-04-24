@@ -13,6 +13,7 @@ install:
 	@ arduino-cli lib install "WebSockets"
 
 compile:
+	@ nu network.nu
 	@ nu secrets.nu
 	@ arduino-cli compile --fqbn $(FQBN) $(SKETCH)
 

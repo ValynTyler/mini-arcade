@@ -1,4 +1,5 @@
 .direnv/
 .env
 
+sketch/network.h
 sketch/secrets.h

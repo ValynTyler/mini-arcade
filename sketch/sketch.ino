@@ -2,6 +2,7 @@
 #include <WebSocketsClient.h>
 
 #include "controller.h"
+#include "network.h"
 #include "secrets.h"
 
 WebSocketsClient client;
